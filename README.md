@@ -1,1 +1,5 @@
-# s15-mp10
+# Restaurant Review Site
+
+## Team Members:
+
+* Tan, Gary Jasper
