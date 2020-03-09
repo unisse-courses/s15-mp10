@@ -4,3 +4,4 @@
 
 * Tan, Gary Jasper
 * Zalamea, Mikiah Matthew T.
+* Go, Kurt Patrick D.
