@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reviewme</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <header>
+        <nav class="navscroll navbar navbar-expand-lg navbar-light bg-white shadow">
+            <a class="navbar-brand text-success" href="#">ReviewMe!</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </li>
+                </ul>
+
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                    User1
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+
+    </header>
+
+    <!-- store owner, desc, reviews, photos -->
+ 
+    <!-- images here -->
+        <div class="thumbnail-container jumbotron shadow">
+            <ul class="thumbnail-list">
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/300x300"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1920x1080"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/640x480"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/800x600"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1024x768"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1280x1024"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1280x720"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1920x1200"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/2560x1440"></span></li>
+                <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/3840x2160"></span></li>
+            </ul>
+        </div>
+
+    
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-2">
+                <img class="card-img-top logo shadow" src="assets/img/logos/mcdoLogo.jpg" alt="Card image cap">
+            </div>
+            <div class="col-10 d-flex align-items-end p-0">
+                <div>   
+                    <h3 class="text-secondary ml-3 mb-1">McDonald's</h3>
+                    <img class="rating ml-3 mb-1" src="assets/img/ratings/5star.png" alt="5 stars">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-3 card-body shadow p-2">        
+                <h5 class="card-title">Store Information:</h5>
+                <p class="card-text">Store address<br> Contacts: 917-xxx-xxxx</p>
+                <a href="storeowner.html" class="card-link" data-toggle="tooltip" data-placement="right" title="store owner">Store Owner</a>
+            </div>
+
+            <div class="col-9 shadow-sm p-2">
+                <h5>About Us</h5>
+                <p> Store Description</p>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

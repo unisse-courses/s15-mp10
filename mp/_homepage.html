@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body class="bg-light">
+	<!--navbar meant to be hidden until scroll down-->
+	<header>
+        <nav class="navscroll navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
+            <a class="navbar-brand text-success" href="#">ReviewMe!</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </li>
+                </ul>
+
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                    User1
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!--content: jumbotron - to be replaced by navbar on scroll down
+                filter
+                store
+                featured stores
+    -->
+    <div class="jumbotron text-center innershadow">
+        <div class="d-flex">
+            <div class="dropdown ml-auto">
+                <button class=" jumbo btn dropdown-toggle btn-outline-success" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                User1
+                </button>
+  
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Log Out</a>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="text-success display-3">ReviewMe!</h1> 
+        <form>
+            <div class="input-group">
+                <input class="jumbo form-control mr-sm-2 shadow-sm" type="search" placeholder="Search Stores">
+                <div class="input-group-btn">
+                    <button class="jumbo btn btn-success my-2 my-sm-0 shadow-lg" type="submit">Search</button>
+                </div>
+            </div>
+        </form>         
+    </div>
+
+    <!-- filter -->
+    <hr>
+
+	<div class="container">
+		<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#myModal">Open Filter</button>
+    </div>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+            <div class="modal-header">
+                <h4 class="modal-title text-success">Filter</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="fluid-container">
+                    <p class="d-inline-block">Rating</p>
+                     <div class="btn-group center" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary">5</button>
+                        <button type="button" class="btn btn-secondary">4</button>
+                        <button type="button" class="btn btn-secondary">3</button>
+                        <button type="button" class="btn btn-secondary">2</button>
+                        <button type="button" class="btn btn-secondary">1</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+<!-- contains the stores -->
+    <div class="container bg-light mt-2">
+        <div class="row p-2">
+         
+         <!-- currently placeholders to test if layout works
+         *use placeholder cards as template -->
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/mcdoLogo.jpg" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">McDonald's</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/sbLogo.jpg" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Starbucks</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/placeholder.png" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Store</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/placeholder.png" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Store</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/placeholder.png" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Store</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/placeholder.png" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Store</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 p-1">
+                <div class="card shadow">
+                    <a href="#" class="text-muted">
+                        <div class="row m-0 bg-light innershadow-sm">
+                            <div class="col-4 p-0">
+                                <img class="card-img-top logo shadow" src="assets/img/logos/placeholder.png" alt="Card image cap">
+                            </div>
+                            <div class="col-8 d-flex align-items-end p-0">
+                                <h5 class="text-secondary card-title ml-3 mb-1">Store</h5>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-body">
+                        <p class="card-text">*Some store description that best describes the store</p>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+           
+
+
+            <!-- no store cards beyond this -->
+        </div>
+    </div>
+<!-- featured, recommended etc. stores images links to stores-->
+    <hr>
+    <div class="container bg-light mt-2">
+        <p class="font-weight-bold">Featured</p>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner shadow">
+            <!-- placeholder stores
+            *use current carousel items as template similar to stores above
+            *clicking on images redirects to store
+            *images used here must all be same resolution to maintain consistency -->
+            <div class="carousel-item active">
+                <a href="#">
+                    <img class="d-block w-100" src="https://source.unsplash.com/collection/190727/2500x700" alt="First slide">    
+                </a>
+                
+            </div>
+
+            <div class="carousel-item">
+                <a href="">
+                    <img class="d-block w-100" src="https://source.unsplash.com/collection/190727/2500x700" alt="First slide">    
+                </a>
+            </div>
+
+            <div class="carousel-item">
+                <a href="">
+                    <img class="d-block w-100" src="https://source.unsplash.com/collection/190727/2500x700" alt="First slide">    
+                </a>
+            </div>
+            
+        </div>
+        
+    </div>
+    </div>
+
+<!-- footer 
+don't know what to put so left as gray bar-->
+<hr>
+<footer class="bg-dark mt-5" style="height: 50px;">
+    <div class="text-white d-flex align-items-center justify-content-center" style="height: 50px;">
+    </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="assets/js/script.js"></script>
+</body>
+</html>
