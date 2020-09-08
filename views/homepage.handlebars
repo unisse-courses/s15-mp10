@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ReviewMe!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/all.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-light">
+    <div class="main-container">
+        <!--navbar meant to be hidden until scroll down-->
+        {{#if user.username = Uguest}}
+        <header>
+            <nav class="navscroll navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
+                <a class="navbar-brand text-success" href="homepage.html">ReviewMe!</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </li>
+                    </ul>
+                    <!-- switch to dropdown when logged in otherwise prompt to login or signup-->
+                    <a href="login.html" role="button" class="btn btn-outline-success mr-1">Log In
+                    </a>
+                    <a href="signup.html" role="button" class="btn btn-success ml-1">Sign Up
+                    </a>
+                </div>
+            </nav>
+        </header>
+        {{else}}
+        <header>
+            <nav class="navscroll navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
+                <a class="navbar-brand text-success" href="#">ReviewMe!</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </li>
+                    </ul>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown">
+                            {{user.username}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="userprof.html">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="homepage.html">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        {{/if}}
+
+        <!--content: jumbotron - to be replaced by navbar on scroll down
+                featured stores    
+                filter
+                store
+            -->
+        {{#if user.username = Uguest}}
+        <div class="jumbotron text-center innershadow">
+            <div class="d-flex">
+                <!-- switch to dropdown when logged in otherwise prompt to login or signup-->
+                <div class="ml-auto">
+                    <a href="login.html" role="button" class="btn btn-outline-success mr-1">Log In
+                    </a>
+                    <a href="signup.html" role="button" class="btn btn-success ml-1">Sign Up
+                    </a>
+                </div>
+            </div>
+
+            <h1 class="text-success display-3">ReviewMe!</h1>
+            <form>
+                <div class="input-group">
+                    <input class="jumbo form-control mr-sm-2 shadow-sm" type="search" placeholder="Search Stores">
+                    <div class="input-group-btn">
+                        <button class="jumbo btn btn-success my-2 my-sm-0 shadow-lg" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {{#else}}
+        <div class="jumbotron text-center innershadow">
+            <div class="d-flex">
+                <div class="dropdown ml-auto">
+                    <button class=" jumbo btn dropdown-toggle btn-outline-success" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{user.username}}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="userprof.html">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="homepage.html">Log Out</a>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-success display-3">ReviewMe!</h1>
+            <form>
+                <div class="input-group">
+                    <input class="jumbo form-control mr-sm-2 shadow-sm" type="search" placeholder="Search Stores">
+                    <div class="input-group-btn">
+                        <button class="jumbo btn btn-success my-2 my-sm-0 shadow-lg" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {{/if}}
+
+        <!-- featured, recommended etc. stores images links to stores-->
+        <hr>
+        <div class="container bg-light mt-2">
+            <p class="font-weight-bold">Featured</p>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner shadow">
+                    <!-- placeholder stores
+                        *use current carousel items as template similar to stores above
+                        *clicking on images redirects to store
+                        *images used here must all be same resolution to maintain consistency -->
+                    {{#each store}}
+                    <div class="carousel-item active">
+                        <a href="#">
+                            <img class="d-block w-100" src="{{this.img}}"
+                                alt="First slide">
+                        </a>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+        <!-- filter -->
+        <hr>
+        <div class="container">
+            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#filterModal">Open
+                Filter</button>
+        </div>
+        <div class="modal fade" id="filterModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-success">Filter</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="fluid-container">
+                            <p class="d-inline-block">Rating</p>
+                            <div class="btn-group center" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary">5</button>
+                                <button type="button" class="btn btn-secondary">4</button>
+                                <button type="button" class="btn btn-secondary">3</button>
+                                <button type="button" class="btn btn-secondary">2</button>
+                                <button type="button" class="btn btn-secondary">1</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- contains the stores -->
+        <div class="container bg-light mt-2">
+            <div class="row p-2">
+
+                <!-- currently placeholders to test if layout works
+                 *use placeholder cards as template -->
+                 {{#each store}}
+                <div class="col-4 p-1">
+                    <div class="card shadow">
+                        <a href="store.html" class="text-muted">
+                            <div class="row m-0 bg-light innershadow-sm">
+                                <div class="col-4 p-0">
+                                    <img class="card-img-top logo shadow" src="{{this.img}}"
+                                        alt="Card image cap">
+                                </div>
+                                <div class="col-8 d-flex align-items-end p-0">
+                                    <h5 class="text-secondary card-title ml-3 mb-1">{{this.name}}</h5>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text">{{this.desc}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <img class="rating" src="{{this.rating}}" alt="5 stars">
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+                <!-- no store cards beyond this -->
+            </div>
+        </div>
+
+        <!-- footer 
+            don't know what to put so left as gray bar-->
+        <hr>
+        <footer class="bg-dark mt-5" style="height: 50px;">
+            <div class="text-white d-flex align-items-center justify-content-center" style="height: 50px;">
+            </div>
+        </footer>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/script.js"></script>
+</body>
+
+</html>

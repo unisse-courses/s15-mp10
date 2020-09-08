@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Name</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/all.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- navbar -->
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow">
+                <a class="navbar-brand text-success" href="_homepage.html">ReviewMe!</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </li>
+                    </ul>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown">
+                            User1
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="userprof.html">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="homepage.html">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- store photos -->
+        <div class="thumbnail-container jumbotron shadow">
+            <ul class="thumbnail-list">
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/300x300"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/1920x1080"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/640x480"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/800x600"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/1024x768"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/1280x1024"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/1280x720"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/1920x1200"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/2560x1440"></span></li>
+                <li><span><img class="thumbnail-image"
+                            src="https://source.unsplash.com/collection/190727/3840x2160"></span></li>
+            </ul>
+        </div>
+
+        <!-- store details -->
+        <div class="container">
+            <div class="row">
+                <div class="col-3 p-2 shadow">
+                    <h5>Store Information:</h5>
+                    <p>
+                        Store address<br />
+                        Contacts: 917-xxx-xxxx<br />
+                        Store Schedule<br />
+                    </p>
+                    <a href="_storeownerforother.html" class="card-link" data-toggle="tooltip" data-placement="right"
+                        title="store owner">Store Owner</a>
+                </div>
+                <div class="col-9">
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            <img class="card-img-top logo shadow" src="assets/img/logos/mcdoLogo.jpg"
+                                alt="Card image cap">
+                        </div>
+                        <div class="col-10 d-flex align-items-end p-0">
+                            <div>
+                                <!--in div so content is stacked-->
+                                <h3 class="text-secondary ml-3 mb-1">McDonald's</h3>
+                                <img class="rating ml-3 mb-1" src="assets/img/ratings/5star.png" alt="5 stars">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <h5>About Us</h5>
+                        <p> Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description Store Description
+                            Store Description Store Description Store Description Store Description </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- reviews -->
+            <div class="container">
+                <h3 class="text-secondary">Reviews</h3>
+
+                <div class="m-3 p-3">
+                    <textarea style="overflow:auto;resize:none" rows="13" cols="20;" class="form-control mt-2" rows="3"
+                        id="comment" placeholder="Enter your review"></textarea>
+                    <div>
+                        <div class="row">
+                            <div class="col-5">
+                                <button onclick="result()" type="button"
+                                    class="btn btn-lg btn-success m-1">Submit</button>
+                            </div>
+                            <div class="col-7 d-flex justify-content-end">
+                                <span onclick="starmark(this)" id="1one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onclick="starmark(this)" id="2one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onclick="starmark(this)" id="3one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onclick="starmark(this)" id="4one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onclick="starmark(this)" id="5one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- review section -->
+                <div class="container">
+                    <div class="dropdown d-flex justify-content-end">
+                        <button class="btn btn-outline-success" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="font-weight-bold">
+                                <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                    class="fa fa-sort-amount-down "></span>
+                                SORT BY
+                            </div>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Newest</a>
+                            <a class="dropdown-item" href="#">Oldest</a>
+                            <a class="dropdown-item" href="#">Most Approved</a><!-- most amount of points -->
+                            <a class="dropdown-item" href="#">Least Approved</a><!-- least amount of points -->
+                        </div>
+                    </div>
+
+                    <!-- review sample -->
+                    <div id="reviewtemplate">
+                        <hr>
+                        <div class="row">
+                            <!--for reviewer profile picture and username  -->
+                            <div class="col-1">
+                                <img src="http://standaloneinstaller.com/upload/avatar.png">
+                                <small>by <a href="_userprofforother.html"><span id="userreviewname">Joe</span></a></small>
+                            </div>
+                            <!-- for review rating -->
+                            <div class="col-1 d-flex align-items-center justify-content-center">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex justify-content-center">
+                                        <span onclick="upvote()" id="" style="font-size:20px;cursor:pointer;"
+                                            class="fa fa-arrow-up"></span>
+                                    </div>
+                                    <div  class="d-flex justify-content-center m-1">
+                                        <span id = "upvotes">0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <span onclick="downvote()" id="" style="font-size:20px;cursor:pointer;"
+                                            class="fa fa-arrow-down"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- for review content with date posted -->
+                            <div class="col-10">
+                                <div class="" data-id="0" data-rating="5">
+                                    <img id="reviewrating" class="rating" src="assets/img/ratings/5star.png" alt="5 stars">
+                                </div>
+                                <p id="reviewdesc"class="review-text">My awesome review. My awesome review. My awesome review. My
+                                    awesome review. My awesome review. My awesome review. My awesome review. My awesome
+                                    review. My awesome review. My awesome review. My awesome review. </p>
+                                <small id="reviewtimestamp" class="text-secondary">March 26, 2017</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="bg-dark mt-5" style="height: 50px;">
+            <div class="text-white d-flex align-items-center justify-content-center" style="height: 50px;">
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/script.js"></script>
+    <!-- this script is not final and is only to used as reference -->
+    <script>
+        var count;
+        var votes = document.getElementById("upvotes").innerHTML;
+        var n = Number(votes);
+
+        function starmark(item) {
+            count = item.id[0];
+            Rating = count;
+            var subid = item.id.substring(1);
+            for (var i = 0; i < 5; i++) {
+                if (i < count) {
+                    document.getElementById((i + 1) + subid).style.color = "green";
+                } else {
+                    document.getElementById((i + 1) + subid).style.color = "black";
+                }
+            }
+        }
+
+        function result() {
+            var review = document.getElementById("reviewtemplate");
+            var clnreview = review.cloneNode(true);
+            var dt = new Date();
+            var year = dt.getFullYear();
+            var day = dt.getDate();
+            var strArray=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var month = strArray[dt.getMonth()];
+            
+            if(count == null &&  document.getElementById("comment").value == ""){
+                alert("No review or rating inputed");
+            }else if( document.getElementById("comment").value == ""){
+                alert("No review inputed");
+            }else if(count == null){
+                alert("No rating inputed");
+            }
+            else{
+                document.getElementById("reviewtemplate").appendChild(clnreview);
+                document.getElementById("reviewdesc").innerHTML = document.getElementById("comment").value;
+                document.getElementById("upvotes").innerHTML = "0";
+                document.getElementById("userreviewname").innerHTML = "User1";
+                document.getElementById("reviewtimestamp").innerHTML = month + " " + day + ", " + year;
+            
+
+                if(count==0){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/0star.png");
+                } else if(count==1){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/1star.png");
+                }else if(count==2){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/2star.png");
+                }else if(count==3){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/3star.png");
+                }else if(count==4){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/4star.png");
+                }else if(count==5){
+                    document.getElementById("reviewrating").setAttribute("src","assets/img/ratings/5star.png");
+                }
+
+                document.getElementById("comment").value = "";
+                
+            
+            }
+            
+            //Rating : Count
+            //Review : Comment(id)
+            // alert("Rating : " + count + "\nReview : " + document.getElementById("comment").value);
+        }
+
+        function upvote(){
+            if(Number(votes)<n){
+                n--;
+                document.getElementById("upvotes").innerHTML = String(n);
+            }else{
+                n++;
+                document.getElementById("upvotes").innerHTML = String(n);
+            }
+            
+        }
+
+        function downvote(){
+           
+            if(Number(votes)>n){
+                n++;
+                document.getElementById("upvotes").innerHTML = String(n);
+            }else{
+                n--;
+                document.getElementById("upvotes").innerHTML = String(n);
+            }
+        }
+
+
+    </script>
+    <!-- / -->
+</body>
+
+</html>
