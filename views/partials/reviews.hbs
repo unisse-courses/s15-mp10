@@ -1,0 +1,91 @@
+<div class="container">
+                <h3 class="text-secondary">Reviews</h3>
+
+                <div class="m-3 p-3">
+                    <textarea style="overflow:auto;resize:none" rows="13" cols="20;" class="form-control mt-2" rows="3"
+                        id="comment" placeholder="Enter your review"></textarea>
+                    <div>
+                        <div class="row">
+                            <div class="col-5">
+                                <button onclick="result()" type="button"
+                                    class="btn btn-lg btn-success m-1">Submit</button>
+                            </div>
+                            <div class="col-7 d-flex justify-content-end">
+                                <span onmouseover="starmark(this)" onclick="starmark(this)" id="1one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onmouseover="starmark(this)" onclick="starmark(this)" id="2one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onmouseover="starmark(this)" onclick="starmark(this)" id="3one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onmouseover="starmark(this)" onclick="starmark(this)" id="4one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                                <span onmouseover="starmark(this)" onclick="starmark(this)" id="5one"
+                                    style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- review section -->
+                {{#if user.username = Uguest }}
+                {{else}}
+                <div class="container">
+                    <div class="dropdown d-flex justify-content-end">
+                        <button class="btn btn-outline-success" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="font-weight-bold">
+                                <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                    class="fa fa-sort-amount-down "></span>
+                                SORT BY
+                            </div>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Newest</a>
+                            <a class="dropdown-item" href="#">Oldest</a>
+                            <a class="dropdown-item" href="#">Most Approved</a><!-- most amount of points -->
+                            <a class="dropdown-item" href="#">Least Approved</a><!-- least amount of points -->
+                        </div>
+                    </div>
+
+                    <!-- review sample -->
+                    {{#each review}}
+                    <div>
+                        <hr>
+                        <div class="row">
+                            <!--for reviewer profile picture and username  -->
+                            <div class="col-1">
+                                <img src="http://standaloneinstaller.com/upload/avatar.png">
+                                <small>by <a href="_userprofforother.html">{{review.author}}</a></small>
+                            </div>
+                            <!-- for review rating -->
+                            <div class="col-1 d-flex align-items-center justify-content-center">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex justify-content-center">
+                                        <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                            class="fa fa-arrow-up"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-center m-1">
+                                        {{review.upvotes}}
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                            class="fa fa-arrow-down"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- for review content with date posted -->
+                            <div class="col-10">
+                                <div class="" data-id="0" data-rating="5">
+                                    <img class="rating" src="{{review.rating}}" alt="5 stars">
+                                </div>
+                                <p class="review-text">{{review.body}} </p>
+                                <small class="text-secondary">{{review.date}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{else}}
+                {{/if}}
+
+            </div>
