@@ -1,0 +1,32 @@
+<div class="row">
+                <div class="col-3 p-2 shadow">
+                    <h5>Store Information:</h5>
+                    <p>
+                        {{store.address}}<br />
+                        Contacts: {{store.contactNo}}<br />
+                        Store Schedule: {{store.sched}}<br />
+                    </p>
+                    <a href="_storeownerforother.html" class="card-link" data-toggle="tooltip" data-placement="right"
+                        title="store owner">{{store.owner}}</a>
+                </div>
+                <div class="col-9">
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            <img class="card-img-top logo shadow" src="{{store.logo}}"
+                                alt="Card image cap">
+                        </div>
+                        <div class="col-10 d-flex align-items-end p-0">
+                            <div>
+                                <!--in div so content is stacked-->
+                                <h3 class="text-secondary ml-3 mb-1">{{store.name}}</h3>
+                                <img class="rating ml-3 mb-1" src="{{store.rating}}" alt="5 stars">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <h5>About Us</h5>
+                        <p> {{store.desc}} </p>
+                    </div>
+                </div>
+            </div>
