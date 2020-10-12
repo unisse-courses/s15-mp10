@@ -2,7 +2,7 @@
   "name": "mp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",
