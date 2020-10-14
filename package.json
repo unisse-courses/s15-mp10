@@ -12,6 +12,7 @@
     "express-session": "^1.17.1",
     "jquery": "^3.5.1",
     "mongoose": "^5.9.13",
+    "nodemon": "^2.0.5",
     "validator": "^13.0.0"
   },
   "devDependencies": {},
