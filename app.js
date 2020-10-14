@@ -1,38 +1,70 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
-const handlebars = require('handlebars');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
-const storeModel = require('./models/store');
-const storeOwnerModel = require('./models/storeOwner');
-const userModel = require('./models/user');
+require('dotenv').config();
 
 const app = express();
-const port = 9090;
+const PORT = process.env.PORT || 3000;
 
-app.engine( 'hbs', exphbs({
-  extname: 'hbs', 
-  defaultView: 'homepage', 
-  layoutsDir: path.join(__dirname, '/views/layouts'), 
-  partialsDir: path.join(__dirname, '/views/partials'), 
+// Making a session with a given key
+
+app.use(cookieParser());
+app.use(session({
+    'secret': 'CCAPDEV',
+    'name': "cookie",
+    'resave': true,
+    'saveUninitialized': true
 }));
 
+// Initialize the view
+app.use(express.static(__dirname + '/'));
+app.set('views', path.join(__dirname, 'views/'));
+app.engine('hbs', exphbs.create({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    partialsDir: 'views/partials',
+    layoutsDir: 'views/layouts',
+    helpers: {
+        getDate: function(date) {
+            var d = new Date(date);
+            var day, month;
+            day = d.getDate();
+            if (day < 10)
+                day = '0' + day;
+            month = d.getMonth() + 1;
+            if (month < 10)
+                month = '0' + month;
+
+            return month + '/' + day + '/' + d.getFullYear();
+        },
+
+        getPrice: function(price) {
+            return price.toFixed(2);
+        },
+        convertbool: function(bVal) {
+            if (bVal)
+                return 'Yes';
+            else return 'No';
+        },
+    }
+}).engine);
 app.set('view engine', 'hbs');
 
-app.use(bodyParser.json());
+// MIDDLEWARES => functions that run before we execute the control functions
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-/** ROUTES **/
-// Home route
-app.get('/', function(req, res) {
-  res.render('homepage', { title: 'Home' });
-});
+// ROUTERS
+const indexRouter = require('./router/indexRouter');
+const { text } = require('body-parser');
+app.use('/', indexRouter)
 
-//image rendering
-app.use(express.static('public'));
-
-// Listening to the port provided
-app.listen(port, function() {
-  console.log('App listening at port '  + port)
+// log this in console when ran
+app.listen(PORT, () => {
+    console.log(`Listening to localhost on port ${PORT}`);
 });
