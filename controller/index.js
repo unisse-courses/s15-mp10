@@ -1,6 +1,12 @@
 const fs = require('fs');
 const handlebars = require('handlebars');
 
+const userModel = require('../models/usersdb');
+const storeModel = require('../models/storesdb');
+const reviewModel = require('../models/reviewsdb');
+const commentModel = require('../models/commentsdb');
+const imageModel = require('../models/imagesdb');
+
 const indexFunctions = {
     getHomepage: function (req, res) {
         if (req.session.type) { // if req.session.type == true

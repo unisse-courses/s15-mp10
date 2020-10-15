@@ -1,13 +1,11 @@
 var mongoose = require('mongoose');
-
-mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/<dbname>?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => { console.log('users'); },
+mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/ReviewMe?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => { console.log('usersdb: OK'); },
         err => {
-            console.log('theres problems');
+            console.log('usersdb: ');
+            console.log(err);
         });
-
 var db = mongoose.connection;
-
 
 const userSchema = new mongoose.Schema({
     userID: {type: Number, required: true},

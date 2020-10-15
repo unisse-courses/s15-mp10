@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
-
-mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/<dbname>?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => { console.log('comments'); },
+mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/ReviewMe?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => { console.log('commentsdb: OK'); },
         err => {
-            console.log('theres problems');
+            console.log('commentsdb: ');
+            console.log(err);
         });
-
 var db = mongoose.connection;
 
 
@@ -24,3 +23,8 @@ commentSchema.methods.recordComment = async function() {
 const commentsModel = db.model('Comments', commentSchema);
 
 module.exports = commentsModel;
+    
+
+
+
+
