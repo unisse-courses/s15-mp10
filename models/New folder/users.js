@@ -1,11 +1,28 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
+
+mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/<dbname>?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => { console.log('users'); },
+        err => {
+            console.log('theres problems');
+        });
+
+var db = mongoose.connection;
+
 
 const userSchema = new mongoose.Schema({
-    _id: String,
-    username: String,
-    password: String,
-    bio: String,
-    isStoreOwner: Boolean
-});
+    userID: {type: Number, required: true},
+    email: {type: String, required: true},
+    password: {type: String, required: true},
+    bio: {type: String, required: true},
+    isStoreOwner: {type: Boolean, required: true},
+}, { collection: "Users" });
 
-module.exports = mongoose.model('users', userSchema);
+userSchema.methods.recordUser = async function() {
+    var result = usersModel.create(this);
+    console.log(JSON.stringify(result));
+    return result;
+};
+
+const usersModel = db.model('Users', userSchema);
+
+module.exports = usersModel;

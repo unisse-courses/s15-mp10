@@ -4,6 +4,9 @@ const controller = require('../controller/index');
 const indexMiddleware = require('../middlewares/indexMiddleware');
 // GETS
 router.get('/', controller.getHomepage);
+router.get('/login', controller.getLogin);
+router.get('/signup', controller.getSignup);
 // ACTIONS
 // POSTS
+router.post('/login', controller.postLogin);
 module.exports = router;

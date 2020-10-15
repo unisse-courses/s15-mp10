@@ -17,6 +17,24 @@ const indexFunctions = {
             });
         }
     },
+    getLogin: function (req, res) {
+        res.render('login', {
+            title: 'Login'
+        });
+    },
+    getSignup: function (req, res) {
+        res.render('signup', {
+            title: 'Sign Up'
+        });
+    },
+    postLogin: function (req, res) {
+        console.log(req.body);
+        // var {
+        //     email,
+        //     pass
+        // } = req.body;
+        res.send();
+    },
 }
 
 module.exports = indexFunctions;

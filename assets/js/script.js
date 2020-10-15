@@ -1,12 +1,12 @@
-(function($) {
+(function ($) {
 
-    $(document).ready(function() {
-
+    $(function () {
+        // DESIGN
         //hide navbar
         $(".navscroll").hide();
         //fade in navbar
-        $(function() {
-            $(window).scroll(function() {
+        $(function () {
+            $(window).on('scroll', function () {
                 if ($(this).scrollTop() > 100) {
                     $('.navscroll').fadeIn();
                     $('.jumbo').prop("disabled", true);
@@ -16,13 +16,11 @@
                 }
             });
         });
-
-
         //hide navbar
         $(".bioscroll").hide();
         //fade in navbar
-        $(function() {
-            $(window).scroll(function() {
+        $(function () {
+            $(window).on('scroll', function () {
                 if ($(this).scrollTop() > 300) {
                     $('.bioscroll').fadeIn();
                     $('.jumbo').prop("disabled", true);
@@ -32,6 +30,21 @@
                 }
             });
         });
+
+
+        // FEATURES
+        // $('#login_submit').on('click', function () {
+        //     var email = $('#login_email').val();
+        //     var password = $('#login_password').val();
+        //     // VALIDATION
+        //     // POST
+        //     $.post('/login', {
+        //         email: email,
+        //         pass: password
+        //     }, function(result) {
+
+        //     });
+        // });
     });
 
 }(jQuery));
