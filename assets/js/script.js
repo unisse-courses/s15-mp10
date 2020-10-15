@@ -70,15 +70,15 @@
                 dbo.collection("email").find(query1).toArray(function(err, result) {
                   if (err) throw err;
                   console.log(result);
-                  db.close();
-                });
-
-                dbo.collection("password").find(query2).toArray(function(err,result){
+                    dbo.collection("password").find(query2).toArray(function(err,result){
                     if(err) throw err;
                     console.log(result);
-                    db.close();
-                }
-              );
+                     },
+                  db.close());
+                });
+
+                
+              
     });
 
 }(jQuery));
