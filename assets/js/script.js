@@ -42,9 +42,43 @@
                 email: email,
                 pass: password
             }, function(result) {
-                
+
+            $("#login_submit").validate({
+                rules: {
+                    email: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "specify email"
+                    },
+                    password: {
+                        required: "specify password"
+                    }
+                }
             });
-        });
+
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db.db("Users");
+                var query1 = email;
+                var query2 = password;
+                dbo.collection("email").find(query1).toArray(function(err, result) {
+                  if (err) throw err;
+                  console.log(result);
+                    dbo.collection("password").find(query2).toArray(function(err,result){
+                    if(err) throw err;
+                    console.log(result);
+                     },
+                  db.close());
+                });
+
+                
+              
     });
 
 }(jQuery));
