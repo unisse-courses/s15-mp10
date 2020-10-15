@@ -33,18 +33,18 @@
 
 
         // FEATURES
-        // $('#login_submit').on('click', function () {
-        //     var email = $('#login_email').val();
-        //     var password = $('#login_password').val();
-        //     // VALIDATION
-        //     // POST
-        //     $.post('/login', {
-        //         email: email,
-        //         pass: password
-        //     }, function(result) {
-
-        //     });
-        // });
+        $('#login_submit').on('click', function () {
+            var email = $('#login_email').val();
+            var password = $('#login_password').val();
+            // VALIDATION
+            // POST
+            $.post('/login', {
+                email: email,
+                pass: password
+            }, function(result) {
+                
+            });
+        });
     });
 
 }(jQuery));

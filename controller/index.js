@@ -27,13 +27,20 @@ const indexFunctions = {
             title: 'Sign Up'
         });
     },
+    getStoreSignup: function (req, res) {
+        res.render('storeSignup', {
+            title: 'Sign Up'
+        });
+    },
     postLogin: function (req, res) {
         console.log(req.body);
-        // var {
-        //     email,
-        //     pass
-        // } = req.body;
-        res.send();
+        var {
+            email,
+            pass
+        } = req.body;
+        res.send({
+            status: 200
+        });
     },
 }
 
