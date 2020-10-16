@@ -8,35 +8,35 @@ const commentModel = require('../models/commentsdb');
 const imageModel = require('../models/imagesdb');
 
 function User(userID, email, password, bio, isStoreOwner) {
-    this.userID = userID,
-        this.email = email,
-        this.password = password,
-        this.bio = bio,
-        this.isStoreOwner = isStoreOwner
+    this.userID = userID;
+    this.email = email;
+    this.password = password;
+    this.bio = bio;
+    this.isStoreOwner = isStoreOwner;
 }
 
 function Store(storeID, userID, storeName, description) {
-    this.storeID = storeID,
-        this.userID = userID,
-        this.storeName = storeName,
-        this.description = description
+    this.storeID = storeID;
+    this.userID = userID;
+    this.storeName = storeName;
+    this.description = description;
 }
 
 function Review(reviewID, userID, storeID, postDate, content, storeRating, score) {
-    this.reviewID = reviewID,
-        this.userID = userID,
-        this.storeID = storeID,
-        this.postDate = new Date(postDate),
-        this.content = content,
-        this.storeRating = storeRating,
-        this.score = score
+    this.reviewID = reviewID;
+    this.userID = userID;
+    this.storeID = storeID;
+    this.postDate = new Date(postDate);
+    this.content = content;
+    this.storeRating = storeRating;
+    this.score = score;
 }
 
 function Comment(commentID, userID, reviewID, content) {
-    this.commentID = commentID,
-        this.userID = userID,
-        this.reviewID = reviewID,
-        this.content = content
+    this.commentID = commentID;
+    this.userID = userID;
+    this.reviewID = reviewID;
+    this.content = content;
 }
 
 const indexFunctions = {
