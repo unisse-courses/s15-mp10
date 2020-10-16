@@ -5,7 +5,8 @@ const userModel = require('../models/usersdb');
 const storeModel = require('../models/storesdb');
 const reviewModel = require('../models/reviewsdb');
 const commentModel = require('../models/commentsdb');
-const imageModel = require('../models/imagesdb');
+const storeImageModel = require('../models/storeImagesdb');
+const sentImageModel = require('../models/sentImagesdb');
 
 function User(userID, email, password, bio, isStoreOwner) {
     this.userID = userID;

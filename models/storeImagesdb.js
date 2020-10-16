@@ -4,15 +4,15 @@ mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccap
         useUnifiedTopology: true
     })
     .then(() => {
-            console.log('imagesdb: OK');
+            console.log('storeImagesdb: OK');
         },
         err => {
-            console.log('imagesdb: ');
+            console.log('storeImagesdb: ');
             console.log(err);
         });
 var db = mongoose.connection;
 
-const imageSchema = new mongoose.Schema({
+const storeImageSchema = new mongoose.Schema({
     imageID: {
         type: Number,
         required: true
@@ -26,15 +26,9 @@ const imageSchema = new mongoose.Schema({
         contentType: String
     }
 }, {
-    collection: "Images"
+    collection: "StoreImages"
 });
 
-imageSchema.methods.recordImage = async function () {
-    var result = imagesModel.create(this);
-    console.log(JSON.stringify(result));
-    return result;
-};
+const storeImagesModel = db.model('StoreImages', storeImageSchema);
 
-const imagesModel = db.model('Images', imageSchema);
-
-module.exports = imagesModel;
+module.exports = storeImagesModel;
