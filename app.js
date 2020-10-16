@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
+// const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -30,7 +31,7 @@ app.engine('hbs', exphbs.create({
     partialsDir: 'views/partials',
     layoutsDir: 'views/layouts',
     helpers: {
-        getDate: function(date) {
+        getDate: function (date) {
             var d = new Date(date);
             var day, month;
             day = d.getDate();
@@ -43,10 +44,10 @@ app.engine('hbs', exphbs.create({
             return month + '/' + day + '/' + d.getFullYear();
         },
 
-        getPrice: function(price) {
+        getPrice: function (price) {
             return price.toFixed(2);
         },
-        convertbool: function(bVal) {
+        convertbool: function (bVal) {
             if (bVal)
                 return 'Yes';
             else return 'No';
@@ -56,12 +57,16 @@ app.engine('hbs', exphbs.create({
 app.set('view engine', 'hbs');
 
 // MIDDLEWARES => functions that run before we execute the control functions
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 // ROUTERS
 const indexRouter = require('./router/indexRouter');
-const { text } = require('body-parser');
+const {
+    text
+} = require('body-parser');
 app.use('/', indexRouter)
 
 // log this in console when ran

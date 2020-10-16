@@ -5,24 +5,21 @@ const commentModel = require('../models/commentsdb');
 const imageModel = require('../models/imagesdb');
 
 const indexMiddleware = {
-    validateLogin: async function (req, res, next) {
+    validateSignup: async function (req, res, next) {
         var {
             email,
-            pass
+            pass,
+            pass_repeat
         } = req.body;
+
+
         if (false) {
             res.send();
         } else if (false) {
-            res.sende();
+            res.send();
         } else {
-            res.next();
+            return next();
         }
-
-
-    },
-
-    validateSignup: async function (req, res, next) {
-        var {email, pass, pass_repeat} = req.body;
     },
 }
 

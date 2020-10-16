@@ -9,5 +9,5 @@ router.get('/signup', controller.getSignup);
 router.get('/storeSignup', controller.getStoreSignup)
 // ACTIONS
 // POSTS
-router.post('/login',indexMiddleware.validateLogin ,controller.postLogin);
+router.post('/login', controller.postLogin);
 module.exports = router;

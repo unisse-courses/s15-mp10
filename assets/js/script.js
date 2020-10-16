@@ -31,54 +31,41 @@
             });
         });
 
-
         // FEATURES
         $('#login_submit').on('click', function () {
             var email = $('#login_email').val();
-            var password = $('#login_password').val();
+            var pass = $('#login_password').val();
+            var valid = true;
             // VALIDATION
+            if (!validator.isEmail(email) || validator.isEmpty(pass)) {
+                valid = false;
+                alert('The email or password does not match any account');
+            }
             // POST
-            $.post('/login', {
-                email: email,
-                pass: password
-            }, function(result) {
-
-            $("#login_submit").validate({
-                rules: {
-                    email: {
-                        required: true
-                    },
-                    password: {
-                        required: true
+            if (valid) {
+                $.post('/login', {
+                    email: email,
+                    pass: pass
+                }, function (result) {
+                    switch (result.status) {
+                        case 200: {
+                            alert('Success');
+                            window.location.href = '/';
+                            break;
+                        }
+                        case 400: {
+                            alert('Error 400: ' + result.msg);
+                            break;
+                        }
+                        case 500: {
+                            alert('Error 500: ' + result.msg);
+                            break;
+                        }
                     }
-                },
-                messages: {
-                    email: {
-                        required: "specify email"
-                    },
-                    password: {
-                        required: "specify password"
-                    }
-                }
-            });
-
-            MongoClient.connect(url, function(err, db) {
-                if (err) throw err;
-                var dbo = db.db("Users");
-                var query1 = email;
-                var query2 = password;
-                dbo.collection("email").find(query1).toArray(function(err, result) {
-                  if (err) throw err;
-                  console.log(result);
-                    dbo.collection("password").find(query2).toArray(function(err,result){
-                    if(err) throw err;
-                    console.log(result);
-                     },
-                  db.close());
                 });
+            }
+        });
 
-                
-              
     });
 
 }(jQuery));

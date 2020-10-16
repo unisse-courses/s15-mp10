@@ -7,6 +7,38 @@ const reviewModel = require('../models/reviewsdb');
 const commentModel = require('../models/commentsdb');
 const imageModel = require('../models/imagesdb');
 
+function User(userID, email, password, bio, isStoreOwner) {
+    this.userID = userID,
+        this.email = email,
+        this.password = password,
+        this.bio = bio,
+        this.isStoreOwner = isStoreOwner
+}
+
+function Store(storeID, userID, storeName, description) {
+    this.storeID = storeID,
+        this.userID = userID,
+        this.storeName = storeName,
+        this.description = description
+}
+
+function Review(reviewID, userID, storeID, postDate, content, storeRating, score) {
+    this.reviewID = reviewID,
+        this.userID = userID,
+        this.storeID = storeID,
+        this.postDate = new Date(postDate),
+        this.content = content,
+        this.storeRating = storeRating,
+        this.score = score
+}
+
+function Comment(commentID, userID, reviewID, content) {
+    this.commentID = commentID,
+        this.userID = userID,
+        this.reviewID = reviewID,
+        this.content = content
+}
+
 const indexFunctions = {
     getHomepage: function (req, res) {
         if (req.session.type) { // if req.session.type == true
@@ -39,14 +71,39 @@ const indexFunctions = {
         });
     },
     postLogin: function (req, res) {
-        console.log(req.body);
         var {
             email,
             pass
         } = req.body;
-        res.send({
-            status: 200
-        });
+        try {
+            var match = findEmail(email);
+            if (match) {
+                if (match.password == pass) {
+                    if (match.isStoreOwner) {
+                        req.session.logUser = match;
+                        req.session.type = 'storeOwner'
+                    } else {
+                        req.session.logUser = match;
+                        req.session.type = 'regularUser'
+                    }
+                } else {
+                    res.send({
+                        status: 400,
+                        msg: 'Password does not match'
+                    });
+                }
+            } else {
+                res.send({
+                    status: 400,
+                    msg: 'No email found'
+                });
+            }
+        } catch (e) {
+            res.send({
+                status: 500,
+                msg: e
+            });
+        }
     },
 }
 
