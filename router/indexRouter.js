@@ -10,4 +10,5 @@ router.get('/storeSignup', controller.getStoreSignup)
 // ACTIONS
 // POSTS
 router.post('/login', controller.postLogin);
+router.post('/logout', controller.postLogout);
 module.exports = router;

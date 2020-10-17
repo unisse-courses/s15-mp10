@@ -18,14 +18,15 @@
                 </li>
             </ul>
             <!-- switch to dropdown when logged in otherwise prompt to login or signup-->
-            <a href="/login" role="button" class="btn btn-outline-success mr-1">Log In
-            </a>
-            <a href="/signup" role="button" class="btn btn-success ml-1">Sign Up
-            </a>
+            {{#if guest}}
+            {{> guestUI}}
+            {{else}}
+            {{> userUI}}
+            {{/if}}
         </div>
     </nav>
 </header>
-
+ 
 <!--content: jumbotron - to be replaced by navbar on scroll down
                 featured stores    
                 filter
@@ -35,10 +36,11 @@
     <div class="d-flex">
         <!-- switch to dropdown when logged in otherwise prompt to login or signup-->
         <div class="ml-auto">
-            <a href="login.html" role="button" class="btn btn-outline-success mr-1">Log In
-            </a>
-            <a href="signup.html" role="button" class="btn btn-success ml-1">Sign Up
-            </a>
+            {{#if guest}}
+            {{> guestUI}}
+            {{else}}
+            {{> userUI}}
+            {{/if}}
         </div>
     </div>
 

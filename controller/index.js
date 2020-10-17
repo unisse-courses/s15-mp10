@@ -39,20 +39,18 @@ function Comment(commentID, userID, reviewID, content) {
     this.reviewID = reviewID;
     this.content = content;
 }
-
 const indexFunctions = {
     getHomepage: function (req, res) {
         if (req.session.type) { // if req.session.type == true
-            console.log(req.session.type);
             res.render('homepage', {
                 title: 'ReviewMe',
-                user: req.session.userName
+                guest: false,
+                user: req.session.logUser.username
             });
         } else { // if req.session.type == false
-            console.log(req.session.type);
             res.render('homepage', {
                 title: 'ReviewMe',
-                user: 'guest'
+                guest: true
             });
         }
     },
@@ -71,21 +69,32 @@ const indexFunctions = {
             title: 'Sign Up'
         });
     },
-    postLogin: function (req, res) {
+    postLogin: async function (req, res) {
         var {
             email,
             pass
         } = req.body;
         try {
-            var match = findEmail(email);
+            var match = await userModel.findOne({
+                email: email
+            });
+            console.log('match: ' + match);
             if (match) {
                 if (match.password == pass) {
                     if (match.isStoreOwner) {
                         req.session.logUser = match;
-                        req.session.type = 'storeOwner'
+                        req.session.type = 'storeOwner';
+                        console.log(req.session);
+                        res.send({
+                            status: 200
+                        });
                     } else {
                         req.session.logUser = match;
-                        req.session.type = 'regularUser'
+                        req.session.type = 'regularUser';
+                        console.log(req.session);
+                        res.send({
+                            status: 200
+                        });
                     }
                 } else {
                     res.send({
@@ -105,6 +114,11 @@ const indexFunctions = {
                 msg: e
             });
         }
+    },
+
+    postLogout: function (req, res) {
+        req.session.destroy();
+        res.redirect("/");
     },
 }
 

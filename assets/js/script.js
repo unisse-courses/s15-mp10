@@ -31,16 +31,19 @@
             });
         });
 
+        $('#login_form').on('submit', function(e){
+            e.preventDefault();
+        });
         // FEATURES
         $('#login_submit').on('click', function () {
             var email = $('#login_email').val();
             var pass = $('#login_password').val();
             var valid = true;
             // VALIDATION
-            if (!validator.isEmail(email) || validator.isEmpty(pass)) {
-                valid = false;
-                alert('The email or password does not match any account');
-            }
+            // if (!validator.isEmail(email) || validator.isEmpty(pass)) {
+            //     valid = false;
+            //     alert('The email or password does not match any account');
+            // }
             // POST
             if (valid) {
                 $.post('/login', {
