@@ -31,7 +31,7 @@
             });
         });
 
-        $('#login_form').on('submit', function(e){
+        $('form').on('submit', function (e) {
             e.preventDefault();
         });
         // FEATURES
@@ -40,10 +40,10 @@
             var pass = $('#login_password').val();
             var valid = true;
             // VALIDATION
-            // if (!validator.isEmail(email) || validator.isEmpty(pass)) {
-            //     valid = false;
-            //     alert('The email or password does not match any account');
-            // }
+            if (!validator.isEmail(email) || validator.isEmpty(pass)) {
+                valid = false;
+                alert('The email or password does not match any account');
+            }
             // POST
             if (valid) {
                 $.post('/login', {
@@ -52,7 +52,6 @@
                 }, function (result) {
                     switch (result.status) {
                         case 200: {
-                            alert('Success');
                             window.location.href = '/';
                             break;
                         }
@@ -69,6 +68,29 @@
             }
         });
 
+        $('#userSignup_submit').on('click', function () {
+            var email = $('#userSignup_email').val();
+            var username = $('#userSignup_username').val();
+            var pass = $('#userSignup_password').val();
+            var pass_repeat = $('#userSignup_password-repeat').val();
+            var valid = true;
+            // VALIDATION
+            if (!validator.isEmail(email) || validator.isEmpty(username) || validator.isEmpty(pass) || validator.isEmpty(pass_repeat)) {
+                valid = false;
+                alert('There are incorrect inputs');
+            } else if(pass != pass_repeat){
+                valid = false;
+                alert('Passwords does not match');
+            }
+
+            if (valid) {
+                $.post('/signup', {
+                    email: email,
+                    username: username,
+                    pass: pass,
+                }, function (result) {});
+            }
+        });
     });
 
 }(jQuery));

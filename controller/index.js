@@ -78,7 +78,6 @@ const indexFunctions = {
             var match = await userModel.findOne({
                 email: email
             });
-            console.log('match: ' + match);
             if (match) {
                 if (match.password == pass) {
                     if (match.isStoreOwner) {
@@ -119,6 +118,10 @@ const indexFunctions = {
     postLogout: function (req, res) {
         req.session.destroy();
         res.redirect("/");
+    },
+
+    postSignup: function(req, res){
+
     },
 }
 

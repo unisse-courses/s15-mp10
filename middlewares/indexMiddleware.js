@@ -9,10 +9,9 @@ const indexMiddleware = {
     validateSignup: async function (req, res, next) {
         var {
             email,
+            username,
             pass,
-            pass_repeat
         } = req.body;
-
 
         if (false) {
             res.send();
