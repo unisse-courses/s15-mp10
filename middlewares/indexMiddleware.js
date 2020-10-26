@@ -7,18 +7,25 @@ const sentImageModel = require('../models/sentImagesdb');
 
 const indexMiddleware = {
     validateSignup: async function (req, res, next) {
-        var {
-            email,
-            username,
-            pass,
-        } = req.body;
+        var email = req.body.email;
 
-        if (false) {
-            res.send();
-        } else if (false) {
-            res.send();
-        } else {
-            return next();
+        try{
+            var match = await userModel.findOne({
+                email: email
+            });
+            if (match) {
+                res.send({
+                    status: 400,
+                    msg:'Email has already been used'
+                });
+            } else {
+                return next();
+            }
+        }catch (e){
+            res.send({
+                status: 500,
+                msg:'An error has occured'
+            });
         }
     },
 }

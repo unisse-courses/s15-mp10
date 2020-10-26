@@ -8,9 +8,10 @@ const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
 
-function User(userID, email, password, bio, isStoreOwner) {
+function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
     this.email = email;
+    this.username = username;
     this.password = password;
     this.bio = bio;
     this.isStoreOwner = isStoreOwner;
@@ -38,6 +39,24 @@ function Comment(commentID, userID, reviewID, content) {
     this.userID = userID;
     this.reviewID = reviewID;
     this.content = content;
+}
+
+async function getMinMaxUserID(sortby, offset) {
+    //sortby - min = 1, max = -1
+    //offset - adds userad by offset
+    var highestID = await userModel.aggregate([{
+        '$sort': {
+            'userID': sortby
+        }
+    }, {
+        '$limit': 1
+    }, {
+        '$project': {
+            'userID': 1
+        }
+    }]);
+
+    return highestID[0].userID + offset;
 }
 const indexFunctions = {
     getHomepage: function (req, res) {
@@ -120,8 +139,34 @@ const indexFunctions = {
         res.redirect("/");
     },
 
-    postSignup: function(req, res){
+    postUserSignup: async function(req, res){
+        var {
+            email,
+            username,
+            pass
+        } = req.body;
 
+        try {
+            var userID = await getMinMaxUserID(-1, 1);
+            var user = new User(userID, email, username, pass, "", false);
+            var newUser = new userModel(user);
+            var result = await newUser.recordNewUser();
+            if (result)
+                res.send({
+                    status: 200,
+                    userID
+                });
+            else res.send({
+                status: 401,
+                msg: 'Cannot connect to database'
+            });
+        } catch (e) {
+            console.log(e);
+            res.send({
+                status: 500,
+                msg: e
+            });
+        }
     },
 }
 

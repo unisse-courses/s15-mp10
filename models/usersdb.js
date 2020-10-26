@@ -21,13 +21,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     password: {
         type: String,
         required: true
     },
     bio: {
         type: String,
-        required: true
     },
     isStoreOwner: {
         type: Boolean,
@@ -37,9 +40,8 @@ const userSchema = new mongoose.Schema({
     collection: "Users"
 });
 
-userSchema.methods.recordUser = async function () {
+userSchema.methods.recordNewUser = async function () {
     var result = usersModel.create(this);
-    console.log(JSON.stringify(result));
     return result;
 };
 

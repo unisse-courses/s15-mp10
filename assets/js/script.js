@@ -84,11 +84,29 @@
             }
 
             if (valid) {
-                $.post('/signup', {
+                $.post('/userSignup', {
                     email: email,
                     username: username,
                     pass: pass,
-                }, function (result) {});
+                }, function (result) {
+                    switch (result.status) {
+                        case 200:
+                            {
+                                alert('case 200: ' + result.userID);
+                                break;
+                            }
+                        case 400:
+                            {
+                                alert('case 400: ' + result.msg);
+                                break;
+                            }
+                        case 500:
+                            {
+                                alert('Error ' + result.msg);
+                                break;
+                            }
+                    }
+                });
             }
         });
     });
