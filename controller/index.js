@@ -58,6 +58,15 @@ async function getMinMaxUserID(sortby, offset) {
 
     return highestID[0].userID + offset;
 }
+
+function createActionUrl(url, actions) {
+    var finalUrl = url;
+
+    for (var i = 0; i < actions.length; i++) {
+        finalUrl = finalUrl + '/' + actions[i];
+    }
+    return finalUrl;
+}
 const indexFunctions = {
     getHomepage: function (req, res) {
         if (req.session.type) { // if req.session.type == true
@@ -139,7 +148,7 @@ const indexFunctions = {
         res.redirect("/");
     },
 
-    postUserSignup: async function(req, res){
+    postUserSignup: async function (req, res) {
         var {
             email,
             username,
@@ -164,10 +173,33 @@ const indexFunctions = {
             console.log(e);
             res.send({
                 status: 500,
-                msg: e
+                msg: 'An error has occured'
+            });
+        }
+    },
+
+    postStoreSignup: async function (req, res) {
+        var {
+            email,
+            username,
+            pass
+        } = req.body;
+
+        try {
+            var userID = await getMinMaxUserID(-1, 1);
+            var actionUrl = createActionUrl('/storeSignup', [email, username, pass, userID]);
+            res.send({
+                status: 200,
+                actionUrl
+            });
+
+        } catch (e) {
+            console.log(e);
+            res.send({
+                status: 500,
+                msg: 'An error has occured'
             });
         }
     },
 }
-
 module.exports = indexFunctions;
