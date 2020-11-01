@@ -1,7 +1,7 @@
 <div class="register-photo">
     <div class="form-container">
-        <form method="post">
-            <a href="homepage.html" class="text-dark">
+        <form id="login_form">
+            <a href="/homepage" class="text-dark">
                 <h1 class="text-center"><strong>ReviewMe!</strong></h1>
             </a>
             <h2 class="text-center"><strong>Enter Store Details</strong></h2>
@@ -10,11 +10,10 @@
             <div class="form-group"><textarea class="form-control" id="storeSignup_description"
                     name="storeSignup_description" required="" placeholder="Store Description"></textarea>
             </div>
-
-            <div class="form-group"><a class="btn btn-success btn-block" role="button" href="storeowner.html">Finish</a>
+            <div class="form-group"><button class="btn btn-success btn-block" role="button"
+                    id="storeSignup_submit">Finish</button>
             </div>
-
-            <a href="login.html" class="already">You already have an account? Login here.</a>
         </form>
+        <p hidden id="storeSignup_userID">{{userID}}</p>
     </div>
 </div>

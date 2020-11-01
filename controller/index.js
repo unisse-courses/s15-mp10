@@ -55,20 +55,39 @@ async function getMinMaxUserID(sortby, offset) {
             'userID': 1
         }
     }]);
-
     return highestID[0].userID + offset;
 }
 
-function createActionUrl(url, actions) {
-    var finalUrl = url;
-
-    for (var i = 0; i < actions.length; i++) {
-        finalUrl = finalUrl + '/' + actions[i];
-    }
-    return finalUrl;
+async function getMinMaxStoreID(sortby, offset) {
+    //sortby - min = 1, max = -1
+    //offset - adds userad by offset
+    var highestID = await storeModel.aggregate([{
+        '$sort': {
+            'storeID': sortby
+        }
+    }, {
+        '$limit': 1
+    }, {
+        '$project': {
+            'storeID': 1
+        }
+    }]);
+    return highestID[0].storeID + offset;
 }
+
+// function createActionUrl(url, actions) {
+//     var finalUrl = url;
+
+//     for (var i = 0; i < actions.length; i++) {
+//         finalUrl = finalUrl + '/' + actions[i];
+//     }
+//     return finalUrl;
+// }
 const indexFunctions = {
     getHomepage: function (req, res) {
+        /**DEBUG */
+        console.log('homepage: ');
+        console.log(req.session);
         if (req.session.type) { // if req.session.type == true
             res.render('homepage', {
                 title: 'ReviewMe',
@@ -92,9 +111,9 @@ const indexFunctions = {
             title: 'Sign Up'
         });
     },
-    getStoreSignup: function (req, res) {
+    getStoreSignup: async function (req, res) {
         res.render('storeSignup', {
-            title: 'Sign Up'
+            title: 'Sign Up',
         });
     },
     postLogin: async function (req, res) {
@@ -111,14 +130,12 @@ const indexFunctions = {
                     if (match.isStoreOwner) {
                         req.session.logUser = match;
                         req.session.type = 'storeOwner';
-                        console.log(req.session);
                         res.send({
                             status: 200
                         });
                     } else {
                         req.session.logUser = match;
                         req.session.type = 'regularUser';
-                        console.log(req.session);
                         res.send({
                             status: 200
                         });
@@ -138,7 +155,7 @@ const indexFunctions = {
         } catch (e) {
             res.send({
                 status: 500,
-                msg: e
+                msg: 'Something went wrong'
             });
         }
     },
@@ -160,17 +177,20 @@ const indexFunctions = {
             var user = new User(userID, email, username, pass, "", false);
             var newUser = new userModel(user);
             var result = await newUser.recordNewUser();
-            if (result)
+            if (result) {
+                req.session.logUser = newUser;
+                req.session.type = 'regularUser';
+                /**DEBUG */
+                console.log(req.session);
                 res.send({
                     status: 200,
                     userID
                 });
-            else res.send({
+            } else res.send({
                 status: 401,
                 msg: 'Cannot connect to database'
             });
         } catch (e) {
-            console.log(e);
             res.send({
                 status: 500,
                 msg: 'An error has occured'
@@ -180,26 +200,32 @@ const indexFunctions = {
 
     postStoreSignup: async function (req, res) {
         var {
-            email,
-            username,
-            pass
+            storeName,
+            storeDesc
         } = req.body;
-
+        var userID = req.session.logUser.userID;
         try {
-            var userID = await getMinMaxUserID(-1, 1);
-            var actionUrl = createActionUrl('/storeSignup', [email, username, pass, userID]);
-            res.send({
-                status: 200,
-                actionUrl
-            });
-
+            var storeID = await getMinMaxStoreID(-1, 1);
+            var store = new Store(storeID, userID, storeName, storeDesc);
+            var newStore = new storeModel(store);
+            var result = await newStore.recordStore();
+            if (result) {
+                await userModel.findOneAndUpdate({
+                    email: req.session.logUser.email
+                }, {
+                    isStoreOwner: true
+                });
+                req.session.logUser.isStoreOwner = true;
+                req.session.type = 'storeOwner';
+                res.send({
+                    email: req.session.logUser.email,
+                    pass: req.session.logUser.password
+                });
+            }
         } catch (e) {
-            console.log(e);
-            res.send({
-                status: 500,
-                msg: 'An error has occured'
-            });
+
         }
+
     },
 }
 module.exports = indexFunctions;

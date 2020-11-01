@@ -78,7 +78,7 @@
             if (!validator.isEmail(email) || validator.isEmpty(username) || validator.isEmpty(pass) || validator.isEmpty(pass_repeat)) {
                 valid = false;
                 alert('There are incorrect inputs');
-            } else if(pass != pass_repeat){
+            } else if (pass != pass_repeat) {
                 valid = false;
                 alert('Passwords does not match');
             }
@@ -90,21 +90,18 @@
                     pass: pass,
                 }, function (result) {
                     switch (result.status) {
-                        case 200:
-                            {
-                                alert('case 200: ' + result.userID);
-                                break;
-                            }
-                        case 400:
-                            {
-                                alert('case 400: ' + result.msg);
-                                break;
-                            }
-                        case 500:
-                            {
-                                alert('Error ' + result.msg);
-                                break;
-                            }
+                        case 200: {
+                            window.location.href = '/';
+                            break;
+                        }
+                        case 400: {
+                            alert('case 400: ' + result.msg);
+                            break;
+                        }
+                        case 500: {
+                            alert('Error ' + result.msg);
+                            break;
+                        }
                     }
                 });
             }
@@ -120,37 +117,54 @@
             if (!validator.isEmail(email) || validator.isEmpty(username) || validator.isEmpty(pass) || validator.isEmpty(pass_repeat)) {
                 valid = false;
                 alert('There are incorrect inputs');
-            } else if(pass != pass_repeat){
+            } else if (pass != pass_repeat) {
                 valid = false;
                 alert('Passwords does not match');
             }
 
             if (valid) {
-                $.post('/storeSignup', {
+                $.post('/storeSignup_user', {
                     email: email,
                     username: username,
                     pass: pass,
                 }, function (result) {
                     switch (result.status) {
-                        case 200:
-                            {
-                                window.location.href = result.actionUrl;
-                                break;
-                            }
-                        case 400:
-                            {
-                                alert('case 400: ' + result.msg);
-                                break;
-                            }
-                        case 500:
-                            {
-                                alert('Error ' + result.msg);
-                                break;
-                            }
+                        case 200: {
+                            $.get('/storeSignup/' + result.userID, function (res) {
+                                $('.content').html(res);
+                            });
+                            break;
+                        }
+                        case 400: {
+                            alert('case 400: ' + result.msg);
+                            break;
+                        }
+                        case 500: {
+                            alert('Error ' + result.msg);
+                            break;
+                        }
                     }
                 });
             }
         });
+
+        $('#storeSignup_submit').on('click', function () {
+            var storeName = $('#storeSignup_name').val();
+            var storeDesc = $('#storeSignup_description').val();
+
+
+            if (validator.isEmpty(storeName) || validator.isEmpty(storeDesc)) {
+                alert('There are empty inputs');
+            } else {
+                $.post('/storeSignup_store', {
+                    storeName: storeName,
+                    storeDesc: storeDesc
+                }, function (result) {
+                    window.location.href = '/';
+                });
+            }
+
+        })
     });
 
 }(jQuery));
