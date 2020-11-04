@@ -1,5 +1,28 @@
-{{login_navbar}}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow">
+        <a class="navbar-brand text-success" href="/">ReviewMe!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </li>
+            </ul>
+
+            {{#if guest}}
+            {{> guestUI}}
+            {{else}}
+            {{> userUI}}
+            {{/if}}
+        </div>
+    </nav>
+</header>
 <!-- store reviews -->
 
 <div class="container">
@@ -8,7 +31,7 @@
 
         <div class="col-2">
             <div class="d-flex flex-column">
-                <h5 class="text-secondary ml-3 mb-1">{{username}}</h5>
+                <h5 class="text-secondary ml-3 mb-1">{{user}}</h5>
                 <small class="text-secondary ml-3">UserID: #{{userID}}</small>
                 <button class="btn btn-outline-success" id="userProf_storeCreate">Create a Store</button>
             </div>
@@ -46,12 +69,12 @@
                                 <div class="form-group">
                                     <label for="username">Username</label>
                                     <input class="form-control" type="text" name="username" required=""
-                                        placeholder="Username" value="Username">
+                                        placeholder="Username" value={{user}}>
                                 </div>
                                 <div class="form-group">
                                     <label for="bio">Bio</label>
                                     <textarea class="form-control editorhtml" id="bio" rows="10"
-                                        placeholder="Store Description" wrap="hard"></textarea>
+                                        placeholder="Store Description" wrap="hard">{{bio}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -69,7 +92,7 @@
 <!--after editing -->
 <div class="container bg-light mt-2">
     <div class="row p-2">
-{{!-- bio side card --}}
+        {{!-- bio side card --}}
         <div class="col-4 p-1">
             <div class="card bioscroll shadow sticky-top">
                 <a href="#" class="text-muted">

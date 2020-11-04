@@ -119,7 +119,7 @@ const indexFunctions = {
     getProfile: async function (req, res) {
         res.render('userProf', {
             title: req.session.logUser.username,
-            username: req.session.logUser.username,
+            user: req.session.logUser.username,
             userID: req.session.logUser.userID,
             bio: req.session.logUser.bio
         });
