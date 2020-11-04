@@ -1,174 +1,125 @@
-<!DOCTYPE html>
-<html>
+{{login_navbar}}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/all.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<!-- store reviews -->
 
-<body class="bg-light">
-    <div class="main-container">
-        {{login_navbar}}
+<div class="container">
 
-        <!-- store reviews -->
+    <div class="row m-3">
 
-        <div class="container">
-
-            <div class="row m-3">
-
-                <div class="col-2">
-                    <div class="d-flex flex-column">
-                        <img class="card-img-top logo shadow" src="{{user.profilepic}}"
-                            alt="Card image cap">
-                        <h5 class="text-secondary ml-3 mb-1">{{user.username}}</h5>
-                        <small class="text-secondary ml-3">UserID: #{{user.id}}</small>
-                        <a class="btn btn-outline-success" href="storeSignup.html">Create a Store</a>
-                    </div>
-                </div>
-
-                <div class="col-10 bg-white shadow">
-                    <p class="card-text">
-                        {{user.bio}}
-                    </p>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
-                    <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
-                        class="fa fa-user-edit"></span> Edit
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-container">
-                                    <form method="post">
-
-                                        <div class="form-row">
-                                            <div class="col">
-                                                <label for="pfp">Profile Picture</label>
-                                                <input type="file" accept=".jpg, .jpeg" class="form-control-file"
-                                                    id="pfp">
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="username">Username</label>
-                                                    <input class="form-control" type="text" name="username" required=""
-                                                        placeholder="Username" value="Username">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bio">Bio</label>
-                                            <textarea class="form-control editorhtml" id="bio" rows="10"
-                                                placeholder="Store Description" wrap="hard">
-                                                User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio. User bio.
-                                            </textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-2">
+            <div class="d-flex flex-column">
+                <h5 class="text-secondary ml-3 mb-1">{{username}}</h5>
+                <small class="text-secondary ml-3">UserID: #{{userID}}</small>
+                <button class="btn btn-outline-success" id="userProf_storeCreate">Create a Store</button>
             </div>
         </div>
 
-        <!--after editing -->
-        <div class="container bg-light mt-2">
-            <div class="row p-2">
-
-                <div class="col-4 p-1">
-                    <div class="card bioscroll shadow sticky-top">
-                        <a href="#" class="text-muted">
-                            <div class="row m-0 bg-light innershadow-sm">
-                                <div class="col-4 p-0">
-                                    <img class="card-img-top logo shadow"
-                                        src="http://standaloneinstaller.com/upload/avatar.png" alt="Card image cap">
-                                </div>
-                                <div class="col-8 d-flex align-items-end p-0">
-                                    <div class="card-title">
-                                        <h5 class="text-secondary ml-3 mb-1">{{user.username}}</h5>
-                                        <small class="text-secondary ml-3">UserID: #{{user.id}}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <div class="card-body">
-                            <p class="card-text">{{user.bio}} </p>
-                        </div>
-                    </div>
-                </div>
-                <!--reviews -->
-                <div class="col-8 p-1">
-
-                    <div class="ml-5">
-                        {{#each review}}
-                        <hr>
-                        <div class="row">
-
-                            <div class="col-3 d-flex flex-column">
-                                <img class="card-img-top logo" src="{{review.logo}}">
-                            </div>
-
-                            <div class="col-9">
-                                <div class="" data-id="0" data-rating="5">
-                                    <img class="rating" src="{{review.rating}}" alt="5 stars">
-                                    <span class="text-secondary">
-                                        <small>{{review.points}}</small>
-                                        .
-                                        <small>{{review.date}}</small>
-                                    </span>
-                                </div>
-                                <p class="review-text">{{review.body}}</p>
-                            </div>
-                        </div>
-                        {{/each}}
-
-                    </div>
-
-                </div>
-            </div>
+        <div class="col-10 bg-white shadow">
+            <p class="card-text">
+                {{bio}}
+            </p>
         </div>
-
-        <footer class="bg-dark mt-5 fixed" style="height: 50px;">
-            <div class="text-white d-flex align-items-center justify-content-center" style="height: 50px;">
-            </div>
-        </footer>
-
-
-
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <script type="text/javascript" src="assets/js/script.js"></script>
-</body>
 
-</html>
+    <div class="d-flex justify-content-end">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+            <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
+                class="fa fa-user-edit"></span> Edit
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-container">
+                            <form method="post">
+
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input class="form-control" type="text" name="username" required=""
+                                        placeholder="Username" value="Username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bio">Bio</label>
+                                    <textarea class="form-control editorhtml" id="bio" rows="10"
+                                        placeholder="Store Description" wrap="hard"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--after editing -->
+<div class="container bg-light mt-2">
+    <div class="row p-2">
+{{!-- bio side card --}}
+        <div class="col-4 p-1">
+            <div class="card bioscroll shadow sticky-top">
+                <a href="#" class="text-muted">
+                    <div class="row m-0 bg-light innershadow-sm">
+                        <div class="col-4 p-0">
+                            <img class="card-img-top logo shadow" src="http://standaloneinstaller.com/upload/avatar.png"
+                                alt="Card image cap">
+                        </div>
+                        <div class="col-8 d-flex align-items-end p-0">
+                            <div class="card-title">
+                                <h5 class="text-secondary ml-3 mb-1">{{user.username}}</h5>
+                                <small class="text-secondary ml-3">UserID: #{{user.id}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card-body">
+                    <p class="card-text">{{user.bio}} </p>
+                </div>
+            </div>
+        </div>
+        <!--reviews -->
+        <div class="col-8 p-1">
+
+            <div class="ml-5">
+                {{#each review}}
+                <hr>
+                <div class="row">
+
+                    <div class="col-3 d-flex flex-column">
+                        <img class="card-img-top logo" src="{{review.logo}}">
+                    </div>
+
+                    <div class="col-9">
+                        <div class="" data-id="0" data-rating="5">
+                            <img class="rating" src="{{review.rating}}" alt="5 stars">
+                            <span class="text-secondary">
+                                <small>{{review.points}}</small>
+                                .
+                                <small>{{review.date}}</small>
+                            </span>
+                        </div>
+                        <p class="review-text">{{review.body}}</p>
+                    </div>
+                </div>
+                {{/each}}
+
+            </div>
+
+        </div>
+    </div>
+</div>

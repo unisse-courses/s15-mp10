@@ -164,7 +164,48 @@
                 });
             }
 
-        })
+        });
+
+        $('#userSignup_store').on('click', function () {
+            var email = $('#userSignup_email').val();
+            var username = $('#userSignup_username').val();
+            var pass = $('#userSignup_password').val();
+            var pass_repeat = $('#userSignup_password-repeat').val();
+            var valid = true;
+            // VALIDATION
+            if (!validator.isEmail(email) || validator.isEmpty(username) || validator.isEmpty(pass) || validator.isEmpty(pass_repeat)) {
+                valid = false;
+                alert('There are incorrect inputs');
+            } else if (pass != pass_repeat) {
+                valid = false;
+                alert('Passwords does not match');
+            }
+
+            if (valid) {
+                $.post('/storeSignup_user', {
+                    email: email,
+                    username: username,
+                    pass: pass,
+                }, function (result) {
+                    switch (result.status) {
+                        case 200: {
+                            $.get('/storeSignup/' + result.userID, function (res) {
+                                $('.content').html(res);
+                            });
+                            break;
+                        }
+                        case 400: {
+                            alert('case 400: ' + result.msg);
+                            break;
+                        }
+                        case 500: {
+                            alert('Error ' + result.msg);
+                            break;
+                        }
+                    }
+                });
+            }
+        });
     });
 
 }(jQuery));
