@@ -98,21 +98,17 @@
             <div class="card bioscroll shadow sticky-top">
                 <a href="#" class="text-muted">
                     <div class="row m-0 bg-light innershadow-sm">
-                        <div class="col-4 p-0">
-                            <img class="card-img-top logo shadow" src="http://standaloneinstaller.com/upload/avatar.png"
-                                alt="Card image cap">
-                        </div>
                         <div class="col-8 d-flex align-items-end p-0">
                             <div class="card-title">
-                                <h5 class="text-secondary ml-3 mb-1">{{user.username}}</h5>
-                                <small class="text-secondary ml-3">UserID: #{{user.id}}</small>
+                                <h5 class="text-secondary ml-3 mb-1">{{user}}</h5>
+                                <small class="text-secondary ml-3">UserID: #{{usedID}}</small>
                             </div>
                         </div>
                     </div>
                 </a>
 
                 <div class="card-body">
-                    <p class="card-text">{{user.bio}} </p>
+                    <p class="card-text">{{bio}} </p>
                 </div>
             </div>
         </div>
@@ -120,26 +116,8 @@
         <div class="col-8 p-1">
 
             <div class="ml-5">
-                {{#each review}}
-                <hr>
-                <div class="row">
-
-                    <div class="col-3 d-flex flex-column">
-                        <img class="card-img-top logo" src="{{review.logo}}">
-                    </div>
-
-                    <div class="col-9">
-                        <div class="" data-id="0" data-rating="5">
-                            <img class="rating" src="{{review.rating}}" alt="5 stars">
-                            <span class="text-secondary">
-                                <small>{{review.points}}</small>
-                                .
-                                <small>{{review.date}}</small>
-                            </span>
-                        </div>
-                        <p class="review-text">{{review.body}}</p>
-                    </div>
-                </div>
+                {{#each reviews}}
+                    {{>user_review this}}
                 {{/each}}
 
             </div>

@@ -13,7 +13,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Making a session with a given key
-
 app.use(cookieParser());
 app.use(session({
     'secret': 'CCAPDEV',
@@ -51,7 +50,7 @@ app.engine('hbs', exphbs.create({
             if (bVal)
                 return 'Yes';
             else return 'No';
-        },
+        }
     }
 }).engine);
 app.set('view engine', 'hbs');
