@@ -176,11 +176,18 @@
 
         $('#userProf_editOK').on('click', function () {
             var username = $('#userProf_modalUsername').val();
-            var bio = $('userProf_modalBio').val();
+            var bio = $('#userProf_modalBio').val();
 
             // DEBUG
             console.log('username: ' + username);
-            console.log('bio:' + bio);
+            console.log('bio: ' + bio);
+
+            $.post('/userProf_edit', {
+                username: username,
+                bio: bio
+            }, function (result) {
+                window.location.href = '/profile';
+            });
         });
     });
 

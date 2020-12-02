@@ -4,6 +4,8 @@ const reviewModel = require('../models/reviewsdb');
 const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
+const { isEmptyObject } = require('jquery');
+const { default: validator } = require('validator');
 
 const indexMiddleware = {
     validateSignup: async function (req, res, next) {
@@ -27,6 +29,24 @@ const indexMiddleware = {
                 msg:'An error has occured'
             });
         }
+    },
+
+    validateUserEdit: async function(req, res, next){
+        var username = req.body.username;
+        var bio = req.body.bio;
+
+        console.log(req.session);
+        if(validator.isEmpty(username)){
+            username = req.session.logUser.username;
+            console.log('username was empty. Defaulted to: '+ username);
+        }
+
+        if(validator.isEmpty(bio)){
+            bio = req.session.logUser.bio;
+            console.log('bio was empty. Defaulted to: '+ bio);
+        }
+
+        return next();
     },
 }
 
