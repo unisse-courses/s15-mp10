@@ -65,11 +65,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-container">
-                            <form method="post">
+                            <form id="userProf_edit">
 
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input class="form-control" type="text" name="userProf_modalUsername" required=""
+                                    <input class="form-control" type="text" id="userProf_modalUsername" required=""
                                         placeholder="Username" value={{user}}>
                                 </div>
                                 <div class="form-group">
@@ -82,7 +82,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-success" id="userProf_editOK">Save changes</button>
                     </div>
                 </div>
             </div>

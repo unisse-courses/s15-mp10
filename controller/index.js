@@ -8,6 +8,7 @@ const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
 const reviewsModel = require('../models/reviewsdb');
+const { get } = require('https');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -118,42 +119,57 @@ const indexFunctions = {
         });
     },
     getProfile: async function (req, res) {
-        var matches = await reviewsModel.aggregate([
-            {
-              '$lookup': {
-                'from': 'Stores', 
-                'localField': 'storeID', 
-                'foreignField': 'storeID', 
-                'as': 'Store'
-              }
-            }, {
-              '$match': {
-                'userID': req.session.logUser.userID
-              }
-            }, {
-              '$unwind': {
-                'path': '$Store', 
-                'preserveNullAndEmptyArrays': true
-              }
-            }, {
-              '$project': {
-                'postDate': 1, 
-                'content': 1, 
-                'storeRating': 1, 
-                'score': 1, 
-                'storeID': 1, 
-                'storeName': '$Store.storeName'
-              }
+        try{
+            var matches = await reviewsModel.aggregate([
+                {
+                  '$lookup': {
+                    'from': 'Stores', 
+                    'localField': 'storeID', 
+                    'foreignField': 'storeID', 
+                    'as': 'Store'
+                  }
+                }, {
+                  '$match': {
+                    'userID': req.session.logUser.userID
+                  }
+                }, {
+                  '$unwind': {
+                    'path': '$Store', 
+                    'preserveNullAndEmptyArrays': true
+                  }
+                }, {
+                  '$project': {
+                    'postDate': 1, 
+                    'content': 1, 
+                    'storeRating': 1, 
+                    'score': 1, 
+                    'storeID': 1, 
+                    'storeName': '$Store.storeName'
+                  }
+                }
+              ]);
+            res.render('userProf', {
+                title: req.session.logUser.username,
+                user: req.session.logUser.username,
+                userID: req.session.logUser.userID,
+                bio: req.session.logUser.bio,
+                reviews: JSON.parse(JSON.stringify(matches))
+            });
+        }catch{
+            console.log('userID undefined, logging out');
+            if (req.session.type) {
+                res.render('homepage', {
+                    title: 'ReviewMe',
+                    guest: false,
+                    user: req.session.logUser.username
+                });
+            } else {
+                res.render('homepage', {
+                    title: 'ReviewMe',
+                    guest: true
+                });
             }
-          ]);
-        console.log(matches);
-        res.render('userProf', {
-            title: req.session.logUser.username,
-            user: req.session.logUser.username,
-            userID: req.session.logUser.userID,
-            bio: req.session.logUser.bio,
-            reviews: JSON.parse(JSON.stringify(matches))
-        });
+        }
     },
     postLogin: async function (req, res) {
         var {

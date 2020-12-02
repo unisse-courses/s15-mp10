@@ -1,9 +1,10 @@
 <hr>
-<div class="row">
+<div class="row user-review">
     <div class="col-9">
         <div class="" data-id="0" data-rating="5">
             {{!-- <img class="rating" src="{{review.rating}}" alt="5 stars"> --}}
-            <p class="m-0 p-0">{{storeName}}<img src="/assets/img/ratings/{{storeRating}}star.png" alt="[{{storeRating}}stars]" class="rating ml-3"></p>
+            <p class="m-0 p-0 col-9">{{storeName}}<img src="/assets/img/ratings/{{storeRating}}star.png"
+                    alt="[{{storeRating}}stars]" class="rating ml-3"></p>
             <span class="text-secondary">
                 <small>{{score}} points</small>
                 .
@@ -11,5 +12,22 @@
             </span>
         </div>
         <p class="review-text">{{content}}</p>
+    </div>
+    <div class="col-3 d-flex justify-content-end align-items-start">
+
+        <div class="dropdown user-review-more">
+            <a class="nav-link button text-success p-0" href="#" id="navbarDropdown" role="button"
+                data-toggle="dropdown">
+                <span style="font-size:15px;cursor:pointer;" class="fa fa-ellipsis-h"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right p-0 m-0" aria-labelledby="navbarDropdown">
+                <a href="#" class="dropdown-item btn btn-outline-success">Edit</a>
+                {{!-- href="userprof.html" --}}
+                <div class="dropdown-divider"></div>
+                <form action="" method="post"><a class="dropdown-item btn btn-outline-danger" onclick="">Delete</a>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>

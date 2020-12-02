@@ -166,12 +166,21 @@
 
         });
 
-        $('#userProf_storeCreate').on('click', function(){
+        $('#userProf_storeCreate').on('click', function () {
             var userID = $('#userProf_userID').val();
             console.log(userID);
             $.get('/storeSignup/' + userID, function (res) {
                 $('.content').html(res);
             });
+        });
+
+        $('#userProf_editOK').on('click', function () {
+            var username = $('#userProf_modalUsername').val();
+            var bio = $('userProf_modalBio').val();
+
+            // DEBUG
+            console.log('username: ' + username);
+            console.log('bio:' + bio);
         });
     });
 

@@ -10,12 +10,12 @@ img.logo {
 
 .innershadow {
     box-shadow: inset
-    /*horizontal offset*/
-    0
-    /*vertical offset*/
-    -0.5rem
-    /*blur radius*/
-    1rem rgba(0, 0, 0, 0.15);
+        /*horizontal offset*/
+        0
+        /*vertical offset*/
+        -0.5rem
+        /*blur radius*/
+        1rem rgba(0, 0, 0, 0.15);
 }
 
 .innershadow-sm {
@@ -145,4 +145,12 @@ section .section-title {
     border-top-right-radius: .25rem;
     color: #eee;
     font-size: 20px;
+}
+
+.user-review:hover .user-review-more {
+    display: block;
+}
+
+.user-review .user-review-more{
+    display: none;
 }
