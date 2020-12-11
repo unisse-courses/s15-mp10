@@ -13,21 +13,11 @@
         </div>
         <p class="review-text">{{content}}</p>
     </div>
-    <div class="col-3 d-flex justify-content-end align-items-start">
-
-        <div class="dropdown user-review-more">
-            <a class="nav-link button text-success p-0" href="#" id="navbarDropdown" role="button"
-                data-toggle="dropdown">
-                <span style="font-size:15px;cursor:pointer;" class="fa fa-ellipsis-h"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right p-0 m-0" aria-labelledby="navbarDropdown">
-                <a href="#" class="dropdown-item btn btn-outline-success">Edit</a>
-                {{!-- href="userprof.html" --}}
-                <div class="dropdown-divider"></div>
-                <form action="" method="post"><a class="dropdown-item btn btn-outline-danger" onclick="">Delete</a>
-                </form>
-            </div>
-        </div>
-
+    <div class="col-3 d-flex justify-content-center align-items-center">
+        {{#if accOwner}}
+        <a href="/store/{{storeID}}" class="btn btn-outline-success">Edit</a>
+        {{else}}
+        <a href="/store/{{storeID}}" class="btn btn-outline-success">Go to Store</a>
+        {{/if}}
     </div>
 </div>

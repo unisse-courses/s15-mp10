@@ -88,20 +88,25 @@ async function getMinMaxStoreID(sortby, offset) {
 //     return finalUrl;
 // }
 const indexFunctions = {
-    getHomepage: function (req, res) {
+    getHomepage: async function (req, res) {
         /**DEBUG */
         console.log('homepage: ');
         console.log(req.session);
+
+        var matches = await storeModel.find({});
+        console.log(matches);
         if (req.session.type) { // if req.session.type == true
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: false,
-                user: req.session.logUser.username
+                user: req.session.logUser.username,
+                stores: JSON.parse(JSON.stringify(matches)),
             });
         } else { // if req.session.type == false
             res.render('homepage', {
                 title: 'ReviewMe',
-                guest: true
+                guest: true,
+                stores: JSON.parse(JSON.stringify(matches)),
             });
         }
     },
@@ -145,13 +150,16 @@ const indexFunctions = {
                     'storeRating': 1,
                     'score': 1,
                     'storeID': 1,
-                    'storeName': '$Store.storeName'
+                    'storeName': '$Store.storeName',
+                    'accOwner': 'true'
                 }
             }]);
             res.render('userProf', {
                 title: req.session.logUser.username,
                 user: req.session.logUser.username,
                 userID: req.session.logUser.userID,
+                storeOwner: req.session.logUser.isStoreOwner,
+                accOwner: true,
                 bio: req.session.logUser.bio,
                 reviews: JSON.parse(JSON.stringify(matches))
             });
@@ -170,6 +178,23 @@ const indexFunctions = {
                 });
             }
         }
+    },
+    getStore: async function (req, res) {
+        if (req.session.type) { // if req.session.type == true
+            res.render('store', {
+                title: 'Store',
+                guest: false,
+                user: req.session.logUser.username,
+                userID: req.session.logUser.userID,
+                storeOwner: req.session.logUser.isStoreOwner,
+            });
+        } else { // if req.session.type == false
+            res.render('store', {
+                title: 'Store',
+                guest: true,
+            });
+        }
+        
     },
     postLogin: async function (req, res) {
         var {
