@@ -9,6 +9,7 @@ router.get('/signup', controller.getSignup);
 router.get('/storeSignup/:userID', controller.getStoreSignup)
 router.get('/profile', controller.getProfile);
 router.get('/store/:storeID', controller.getStore);
+router.get('/profile/:userID', controller.getProfile);
 // POSTS
 router.post('/login', controller.postLogin);
 router.post('/logout', controller.postLogout);
