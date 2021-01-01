@@ -35,11 +35,11 @@
                 <small class="text-secondary ml-3">UserID: #{{userID}}</small>
                 <input id="userProf_userID" type="hidden" value="{{userID}}">
                 {{#if accOwner}}
-                    {{#if storeOwner}}
-                    <button class="btn btn-outline-success" id="userProf_storeProf">Go to Store</button>
-                    {{else}}
-                    <button class="btn btn-outline-success" id="userProf_storeCreate">Create a Store</button>
-                    {{/if}}
+                {{#if storeOwner}}
+                <button class="btn btn-outline-success" id="userProf_storeProf">Go to Store</button>
+                {{else}}
+                <button class="btn btn-outline-success" id="userProf_storeCreate">Create a Store</button>
+                {{/if}}
                 {{else}}
                 {{/if}}
             </div>
@@ -51,7 +51,7 @@
             </p>
         </div>
     </div>
-
+    {{#if accOwner}}
     <div class="d-flex justify-content-end">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
@@ -95,6 +95,9 @@
             </div>
         </div>
     </div>
+    {{else}}
+    {{/if}}
+
 </div>
 
 <!--after editing -->

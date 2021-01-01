@@ -11,6 +11,7 @@ const reviewsModel = require('../models/reviewsdb');
 const {
     default: validator
 } = require('validator');
+const { findOne } = require('../models/usersdb');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -99,7 +100,8 @@ const indexFunctions = {
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: false,
-                user: req.session.logUser.username,
+                name: req.session.logUser.username,
+                ID: req.session.logUser.userID,
                 stores: JSON.parse(JSON.stringify(matches)),
             });
         } else { // if req.session.type == false
@@ -127,6 +129,8 @@ const indexFunctions = {
     },
     getProfile: async function (req, res) {
         try {
+            var userID = req.params.userID;
+            var user = await userModel.findOne({userID: userID});
             var matches = await reviewsModel.aggregate([{
                 '$lookup': {
                     'from': 'Stores',
@@ -136,7 +140,7 @@ const indexFunctions = {
                 }
             }, {
                 '$match': {
-                    'userID': req.session.logUser.userID
+                    'userID': userID
                 }
             }, {
                 '$unwind': {
@@ -154,17 +158,23 @@ const indexFunctions = {
                     'accOwner': 'true'
                 }
             }]);
+            var isOwner = false;
+            if(req.session.logUser.userID == userID)
+                isOwner = true;
+            console.log(isOwner);
             res.render('userProf', {
-                title: req.session.logUser.username,
-                user: req.session.logUser.username,
-                userID: req.session.logUser.userID,
-                storeOwner: req.session.logUser.isStoreOwner,
-                accOwner: true,
-                bio: req.session.logUser.bio,
+                name: req.session.logUser.username,
+                ID: req.session.logUser.userID,
+                title: user.username,
+                user: user.username,
+                userID: user.userID,
+                storeOwner: user.isStoreOwner,
+                accOwner: isOwner,
+                bio: user.bio,
                 reviews: JSON.parse(JSON.stringify(matches))
             });
-        } catch {
-            console.log('userID undefined, logging out');
+        } catch (e){
+            console.log(e);
             if (req.session.type) {
                 res.render('homepage', {
                     title: 'ReviewMe',
@@ -180,21 +190,33 @@ const indexFunctions = {
         }
     },
     getStore: async function (req, res) {
+        var storeID = req.params.storeID;
+        var store = await storeModel.findOne({
+            storeID: storeID
+        });
+        console.log(store.storeName);
         if (req.session.type) { // if req.session.type == true
             res.render('store', {
-                title: 'Store',
+                name: req.session.logUser.username,
+                ID: req.session.logUser.userID,
+                title: store.storeName,
                 guest: false,
                 user: req.session.logUser.username,
                 userID: req.session.logUser.userID,
                 storeOwner: req.session.logUser.isStoreOwner,
+                storeName: store.storeName,
+                description: store.description,
             });
         } else { // if req.session.type == false
             res.render('store', {
                 title: 'Store',
                 guest: true,
+                userID: store.userID,
+                storeName: store.storeName,
+                description: store.description,
             });
         }
-        
+
     },
     postLogin: async function (req, res) {
         var {

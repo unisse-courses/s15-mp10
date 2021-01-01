@@ -1,10 +1,10 @@
 <!-- switch to dropdown when logged in otherwise prompt to login or signup-->
 <div class="dropdown">
     <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-        {{user}}
+        {{name}}
     </a>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-        <a href="/profile" class="dropdown-item btn btn-outline-success">Profile</a>
+        <a href="/profile/user/{{ID}}" class="dropdown-item btn btn-outline-success">Profile</a>
         {{!-- href="userprof.html" --}}
         <div class="dropdown-divider"></div>
         <form action="/logout" method="post"><a class="dropdown-item btn btn-outline-success"
