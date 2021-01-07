@@ -8,12 +8,6 @@ const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
 const reviewsModel = require('../models/reviewsdb');
-const {
-    default: validator
-} = require('validator');
-const {
-    findOne
-} = require('../models/usersdb');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -23,14 +17,12 @@ function User(userID, email, username, password, bio, isStoreOwner) {
     this.bio = bio;
     this.isStoreOwner = isStoreOwner;
 }
-
 function Store(storeID, userID, storeName, description) {
     this.storeID = storeID;
     this.userID = userID;
     this.storeName = storeName;
     this.description = description;
 }
-
 function Review(reviewID, userID, storeID, postDate, content, storeRating, score) {
     this.reviewID = reviewID;
     this.userID = userID;
@@ -40,14 +32,12 @@ function Review(reviewID, userID, storeID, postDate, content, storeRating, score
     this.storeRating = storeRating;
     this.score = score;
 }
-
 function Comment(commentID, userID, reviewID, content) {
     this.commentID = commentID;
     this.userID = userID;
     this.reviewID = reviewID;
     this.content = content;
 }
-
 async function getMinMaxUserID(sortby, offset) {
     //sortby - min = 1, max = -1
     //offset - adds userad by offset
@@ -64,7 +54,6 @@ async function getMinMaxUserID(sortby, offset) {
     }]);
     return highestID[0].userID + offset;
 }
-
 async function getMinMaxStoreID(sortby, offset) {
     //sortby - min = 1, max = -1
     //offset - adds userad by offset
@@ -239,7 +228,7 @@ const indexFunctions = {
             }, {
               '$unwind': {
                 'path': '$name', 
-                'preserveNullAndEmptyArrays': false
+                'preserveNullAndEmptyArrays': true
               }
             }
           ]);
@@ -378,7 +367,6 @@ const indexFunctions = {
         } catch (e) {
 
         }
-
     },
 
     postUserEdit: async function (req, res) {
