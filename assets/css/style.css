@@ -3,11 +3,6 @@ img.logo {
     height: 128px;
 }
 
-.rating {
-    width: 160px;
-    height: 32px;
-}
-
 .innershadow {
     box-shadow: inset
         /*horizontal offset*/
@@ -100,8 +95,8 @@ a {
 }
 
 .rating {
-    width: 160px;
-    height: 32px;
+    width: 80px;
+    height: 16px;
 }
 
 img.logo {
@@ -153,4 +148,12 @@ section .section-title {
 
 .user-review .user-review-more{
     display: none;
+}
+
+.scoreUp:hover{
+    color: #1e7e34;
+}
+
+.scoreDown:hover{
+    color: #dc3545;
 }

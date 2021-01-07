@@ -1,0 +1,39 @@
+<hr>
+<div class="row" id="{{reviewID}}">
+    <!-- for review score -->
+    <div class="col-1 d-flex align-items-center justify-content-center">
+        <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center scoreUp">
+                <span onmouseover="" onclick="" style="font-size:20px;cursor:pointer;"
+                    class="fa fa-arrow-up"></span>
+            </div>
+            <div class="d-flex justify-content-center m-1">
+                {{score}}
+            </div>
+            <div class="d-flex justify-content-center scoreDown">
+                <span onmouseover="" onclick="" style="font-size:20px;cursor:pointer;"
+                    class="fa fa-arrow-down"></span>
+            </div>
+        </div>
+    </div>
+    <!-- for review content with date posted and rating -->
+    <div class="col-11">
+
+        <div class="" data-id="0" data-rating="5">
+            <p class="m-0 p-0 col-9"><a href="/profile/user/{{name.userID}}">{{name.username}}</a> <img class="rating ml-3 mb-2"
+                    src="/assets/img/ratings/{{storeRating}}star.png" alt="{{storeRating}} stars"></p>
+        </div>
+        <p class="review-text">{{content}}</p>
+        <div class="d-flex justify-content-between">
+            <small class="text-secondary">{{getDate postDate}}</small>
+            <button class="btn btn-outline-success">Reply</button>
+        </div>
+    </div>
+</div>
+{{#each comments}}
+<hr>
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-10 d-flex align-items-center justify-content-start">{{content}}</div>
+</div>
+{{/each}}

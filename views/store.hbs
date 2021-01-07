@@ -49,7 +49,7 @@
         <div>
             <div class="d-flex align-items-end p-0">
                 <h3 class="text-secondary ml-3 mb-1">{{storeName}}</h3>
-                <img class="rating ml-3 mb-1" src="../assets/img/ratings/5star.png" alt="5 stars">
+                <img class="rating ml-3 mb-2" src="../assets/img/ratings/5star.png" alt="5 stars">
             </div>
             <small class="text-secondary ml-3"><a href="/profile/user/{{userID}}">owner</a></small>
         </div>
@@ -64,6 +64,7 @@
     <div class="container">
         <h3 class="text-secondary">Reviews</h3>
 
+        {{#if guest}}
         <div>
             <div class="shadow p-3 m-3">
                 <div class="row text-center">
@@ -79,6 +80,30 @@
                 </div>
             </div>
         </div>
+        {{else}}
+        <div class="m-3 p-3">
+            <textarea style="overflow:auto;resize:none" rows="13" cols="20;" class="form-control mt-2" rows="3"
+                id="comment" placeholder="Enter your review"></textarea>
+            <div>
+                <div class="row">
+                    <div class="col-5">
+                        <button onclick="result()" type="button" class="btn btn-lg btn-success m-1">Submit</button>
+                    </div>
+                    <div class="col-7 d-flex justify-content-end">
+                        <select class="custom-select" id="inputGroupSelect02">
+                            <option selected>Rating...</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
         <!-- reviews for the store -->
 
         <div class="container">
@@ -100,40 +125,10 @@
             </div>
 
             <div>
-                <hr>
-                <div class="row">
-                    <!--for reviewer profile picture and username  -->
-                    <div class="col-1">
-                        <img src="http://standaloneinstaller.com/upload/avatar.png">
-                        <small>by <a href="_userprofforother.html">Joe</a></small>
-                    </div>
-                    <!-- for review rating -->
-                    <div class="col-1 d-flex align-items-center justify-content-center">
-                        <div class="d-flex flex-column">
-                            <div class="d-flex justify-content-center">
-                                <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
-                                    class="fa fa-arrow-up"></span>
-                            </div>
-                            <div class="d-flex justify-content-center m-1">
-                                100k
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
-                                    class="fa fa-arrow-down"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- for review content with date posted -->
-                    <div class="col-10">
-                        <div class="" data-id="0" data-rating="5">
-                            <img class="rating" src="assets/img/ratings/5star.png" alt="5 stars">
-                        </div>
-                        <p class="review-text">My awesome review. My awesome review. My awesome review. My
-                            awesome review. My awesome review. My awesome review. My awesome review. My awesome
-                            review. My awesome review. My awesome review. My awesome review. </p>
-                        <small class="text-secondary">March 26, 2017</small>
-                    </div>
-                </div>
+                {{#each reviews}}
+                {{>store_review this}}
+                {{/each}}
+
             </div>
         </div>
     </div>
