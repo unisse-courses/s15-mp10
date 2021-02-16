@@ -6,8 +6,7 @@ const indexMiddleware = require('../middlewares/indexMiddleware');
 router.get('/', controller.getHomepage);
 router.get('/login', controller.getLogin);
 router.get('/signup', controller.getSignup);
-router.get('/storeSignup/:userID', controller.getStoreSignup)
-router.get('/profile', controller.getProfile);
+router.get('/storeSignup', controller.getStoreSignup)
 router.get('/store/:storeID', controller.getStore);
 router.get('/profile/user/:userID', controller.getProfile);
 // POSTS

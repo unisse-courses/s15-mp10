@@ -52,7 +52,7 @@
                 }, function (result) {
                     switch (result.status) {
                         case 200: {
-                            window.location.href = '/';
+                            window.location=document.referrer;
                             break;
                         }
                         case 400: {
@@ -130,9 +130,7 @@
                 }, function (result) {
                     switch (result.status) {
                         case 200: {
-                            $.get('/storeSignup/' + result.userID, function (res) {
-                                $('.content').html(res);
-                            });
+                            window.location.href = '/storeSignup';
                             break;
                         }
                         case 400: {
@@ -160,7 +158,17 @@
                     storeName: storeName,
                     storeDesc: storeDesc
                 }, function (result) {
-                    window.location.href = '/';
+                    switch (result.status) {
+                        case 200:
+                            window.location.href = '/';
+                            alert('Store Created');
+                            break;
+                        case 500:
+                            window.location.href = '/';
+                            alert('Something went wrong');
+                            break;
+                    }
+
                 });
             }
 
@@ -169,9 +177,7 @@
         $('#userProf_storeCreate').on('click', function () {
             var userID = $('#userProf_userID').val();
             console.log(userID);
-            $.get('/storeSignup/' + userID, function (res) {
-                $('.content').html(res);
-            });
+            window.location.href = '/storeSignup';
         });
 
         $('#userProf_editOK').on('click', function () {
@@ -186,7 +192,7 @@
                 username: username,
                 bio: bio
             }, function (result) {
-                window.location.href = '/profile';
+                location.reload();
             });
         });
     });

@@ -49,7 +49,7 @@
         <div>
             <div class="d-flex align-items-end p-0">
                 <h3 class="text-secondary ml-3 mb-1">{{storeName}}</h3>
-                <img class="rating ml-3 mb-2" src="../assets/img/ratings/5star.png" alt="5 stars">
+                <img class="rating ml-3 mb-2" src="../assets/img/ratings/{{stars}}star.png" alt="{{stars}} stars">
             </div>
             <small class="text-secondary ml-3"><a href="/profile/user/{{userID}}">owner</a></small>
         </div>
@@ -72,25 +72,126 @@
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex justify-content-center">
-                        <a href="login.html" role="button" class="btn btn-outline-success mr-1">Log In
+                        <a href="/login" role="button" class="btn btn-outline-success mr-1">Log In
                         </a>
-                        <a href="signup.html" role="button" class="btn btn-success ml-1">Sign Up
+                        <a href="/signup" role="button" class="btn btn-success ml-1">Sign Up
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         {{else}}
+        {{#if reviewed}}
         <div class="m-3 p-3">
+            <hr>
+            <h3 class="text-secondary">Your Review</h3>
+            <div id="{{myReview.reviewID}}">
+
+
+                <div class="row">
+                    <div class="col-9" data-id="0" data-rating="5">
+                        <p class="m-0 p-0 col-9">{{myReview.score}} points <img class="rating ml-3 mb-2"
+                                src="/assets/img/ratings/{{myReview.storeRating}}star.png"
+                                alt="{{myReview.storeRating}} stars"></p>
+                    </div>
+
+                    <div class="col-3 d-flex justify-content-end align-items-center btn-group" role="group">
+                        <button type="button" class="btn btn-outline-success" data-toggle="modal"
+                            data-target="#myReview_Edit">Edit</button>
+
+                        <div class="modal fade" id="myReview_Edit" tabindex="-1" role="dialog"
+                            aria-labelledby="myReview_EditTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="myReview_EditTitle">Edit Your Review</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <textarea style="overflow:auto;resize:none" rows="13" cols="20;"
+                                            class="form-control mt-2" rows="3" id="myReview_EditContent"
+                                            placeholder="Enter your review"></textarea>
+                                        <select class="custom-select" id="myReview_EditRating">
+                                            <option selected>Rating...</option>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                            data-target="#myReview_Delete">Delete</button>
+
+                        <div class="modal fade" id="myReview_Delete" tabindex="-1" role="dialog"
+                            aria-labelledby="myReview_DeleteTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="myReview_DeleteTitle">Delete your review?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you wnat to delete your review?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        <button type="button" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <p class="review-text">{{myReview.content}}</p>
+                <div class="d-flex justify-content-between">
+                    {{#if myReview.edited}}
+                    <small class="text-secondary">Edited: {{getDate myReview.postDate}}</small>
+                    {{else}}
+                    <small class="text-secondary">{{getDate myReview.postDate}}</small>
+                    {{/if}}
+                    <button class="btn btn-outline-success">Reply</button>
+                </div>
+
+            </div>
+            {{#each myReview.comments}}
+            <hr>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-10 d-flex align-items-center justify-content-start">{{content}}</div>
+            </div>
+            {{/each}}
+            <hr>
+        </div>
+        {{else}}
+        <div class="m-3 p-3">
+            <h3 class="text-secondary">Give Your Review</h3>
             <textarea style="overflow:auto;resize:none" rows="13" cols="20;" class="form-control mt-2" rows="3"
-                id="comment" placeholder="Enter your review"></textarea>
+                id="myReview_NewContent" placeholder="Enter your review"></textarea>
             <div>
                 <div class="row">
                     <div class="col-5">
-                        <button onclick="result()" type="button" class="btn btn-lg btn-success m-1">Submit</button>
+                        <button onclick="submitReview({{storeID}})" type="button"
+                            class="btn btn-lg btn-success m-1">Submit</button>
                     </div>
                     <div class="col-7 d-flex justify-content-end">
-                        <select class="custom-select" id="inputGroupSelect02">
+                        <select class="custom-select" id="myReview_NewRating">
                             <option selected>Rating...</option>
                             <option value="0">0</option>
                             <option value="1">1</option>
@@ -103,6 +204,7 @@
                 </div>
             </div>
         </div>
+        {{/if}}
         {{/if}}
         <!-- reviews for the store -->
 

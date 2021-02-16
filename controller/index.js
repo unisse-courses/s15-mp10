@@ -8,6 +8,9 @@ const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
 const reviewsModel = require('../models/reviewsdb');
+const {
+    isRegExp
+} = require('util');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -17,12 +20,15 @@ function User(userID, email, username, password, bio, isStoreOwner) {
     this.bio = bio;
     this.isStoreOwner = isStoreOwner;
 }
-function Store(storeID, userID, storeName, description) {
+
+function Store(storeID, userID, storeName, description, stars) {
     this.storeID = storeID;
     this.userID = userID;
     this.storeName = storeName;
     this.description = description;
+    this.stars = stars;
 }
+
 function Review(reviewID, userID, storeID, postDate, content, storeRating, score) {
     this.reviewID = reviewID;
     this.userID = userID;
@@ -32,6 +38,7 @@ function Review(reviewID, userID, storeID, postDate, content, storeRating, score
     this.storeRating = storeRating;
     this.score = score;
 }
+
 function Comment(commentID, userID, reviewID, content) {
     this.commentID = commentID;
     this.userID = userID;
@@ -86,7 +93,7 @@ const indexFunctions = {
         // console.log(req.session);
 
         var matches = await storeModel.find({});
-        if (req.session.type) { // if req.session.type == true
+        if (req.session.type) { //check if user is logged in
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: false,
@@ -94,7 +101,7 @@ const indexFunctions = {
                 ID: req.session.logUser.userID,
                 stores: JSON.parse(JSON.stringify(matches)),
             });
-        } else { // if req.session.type == false
+        } else {
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: true,
@@ -119,7 +126,14 @@ const indexFunctions = {
     },
     getProfile: async function (req, res) {
         try {
+
             var userID = req.params.userID;
+
+
+            var accOwner = false;
+            if (userID == req.session.logUser.userID)
+                accOwner = true;
+
             var user = await userModel.findOne({
                 userID: userID
             });
@@ -157,6 +171,7 @@ const indexFunctions = {
                 userID: user.userID,
                 storeOwner: user.isStoreOwner,
                 bio: user.bio,
+                accOwner: accOwner,
                 reviews: JSON.parse(JSON.stringify(matches))
             });
         } catch (e) {
@@ -206,34 +221,62 @@ const indexFunctions = {
         var store = await storeModel.findOne({
             storeID: storeID
         });
-        var reviews = await reviewModel.aggregate([
-            {
-              '$match': {
-                'storeID': 2002
-              }
+        if (req.session.type) { // check if user is logged in
+            var reviews = await reviewModel.aggregate([{
+                '$match': {
+                    'storeID': parseInt(storeID),
+                    'userID': {
+                        '$ne': req.session.logUser.userID
+                    }
+                }
             }, {
-              '$lookup': {
-                'from': 'Comments', 
-                'localField': 'reviewID', 
-                'foreignField': 'reviewID', 
-                'as': 'comments'
-              }
+                '$lookup': {
+                    'from': 'Comments',
+                    'localField': 'reviewID',
+                    'foreignField': 'reviewID',
+                    'as': 'comments'
+                }
             }, {
-              '$lookup': {
-                'from': 'Users', 
-                'localField': 'userID', 
-                'foreignField': 'userID', 
-                'as': 'name'
-              }
+                '$lookup': {
+                    'from': 'Users',
+                    'localField': 'userID',
+                    'foreignField': 'userID',
+                    'as': 'name'
+                }
             }, {
-              '$unwind': {
-                'path': '$name', 
-                'preserveNullAndEmptyArrays': true
-              }
-            }
-          ]);
-        console.log(store.storeName);
-        if (req.session.type) { // if req.session.type == true
+                '$unwind': {
+                    'path': '$name',
+                    'preserveNullAndEmptyArrays': true
+                }
+            }]);
+            var myReview = await reviewModel.aggregate([{
+                '$match': {
+                    'storeID': parseInt(storeID),
+                    'userID': req.session.logUser.userID
+                }
+            }, {
+                '$lookup': {
+                    'from': 'Comments',
+                    'localField': 'reviewID',
+                    'foreignField': 'reviewID',
+                    'as': 'comments'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'Users',
+                    'localField': 'userID',
+                    'foreignField': 'userID',
+                    'as': 'name'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$name',
+                    'preserveNullAndEmptyArrays': true
+                }
+            }]);
+            var reviewed = false;
+            if(myReview[0])
+                reviewed = true;
             res.render('store', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
@@ -243,15 +286,44 @@ const indexFunctions = {
                 userID: req.session.logUser.userID,
                 storeOwner: req.session.logUser.isStoreOwner,
                 storeName: store.storeName,
+                stars:store.stars,
+                storeID: storeID,
                 description: store.description,
+                reviewed: reviewed,
                 reviews: reviews,
+                myReview: myReview[0],
             });
-        } else { // if req.session.type == false
+        } else {
+            var reviews = await reviewModel.aggregate([{
+                '$match': {
+                    'storeID': parseInt(storeID),
+                }
+            }, {
+                '$lookup': {
+                    'from': 'Comments',
+                    'localField': 'reviewID',
+                    'foreignField': 'reviewID',
+                    'as': 'comments'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'Users',
+                    'localField': 'userID',
+                    'foreignField': 'userID',
+                    'as': 'name'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$name',
+                    'preserveNullAndEmptyArrays': true
+                }
+            }]);
             res.render('store', {
                 title: 'Store',
                 guest: true,
                 userID: store.userID,
                 storeName: store.storeName,
+                stars:store.stars,
                 description: store.description,
                 reviews: reviews,
             });
@@ -348,9 +420,11 @@ const indexFunctions = {
         var userID = req.session.logUser.userID;
         try {
             var storeID = await getMinMaxStoreID(-1, 1);
-            var store = new Store(storeID, userID, storeName, storeDesc);
+            var store = new Store(storeID, userID, storeName, storeDesc, 0);
             var newStore = new storeModel(store);
             var result = await newStore.recordStore();
+            console.log('postStoreSignup result:');
+            console.log(result);
             if (result) {
                 await userModel.findOneAndUpdate({
                     userID: userID
@@ -360,12 +434,13 @@ const indexFunctions = {
                 req.session.logUser.isStoreOwner = true;
                 req.session.type = 'storeOwner';
                 res.send({
-                    email: req.session.logUser.email,
-                    pass: req.session.logUser.password
+                    status: 200
                 });
             }
         } catch (e) {
-
+            res.send({
+                status: 500
+            });
         }
     },
 

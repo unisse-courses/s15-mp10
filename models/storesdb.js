@@ -28,6 +28,10 @@ const storeSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    stars:{
+        type: Number,
+        required: true
     }
 }, {
     collection: "Stores"
