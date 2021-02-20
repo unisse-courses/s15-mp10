@@ -15,4 +15,6 @@ router.post('/logout', controller.postLogout);
 router.post('/userSignup', indexMiddleware.validateSignup, controller.postUserSignup);
 router.post('/storeSignup_store', controller.postStoreSignup);
 router.post('/userProf_edit', indexMiddleware.validateUserEdit, controller.postUserEdit);
+
+router.post('/submitReview', controller.postMyReview);
 module.exports = router;

@@ -18,6 +18,14 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    userID: {
+        type: Number,
+        required: true
+    },
+    storeID: {
+        type: Number,
+        required: true
+    },
     postDate: {
         type: Date,
         required: true
@@ -32,6 +40,10 @@ const reviewSchema = new mongoose.Schema({
     },
     score: {
         type: Number,
+        required: true
+    },
+    edited: {
+        type: Boolean,
         required: true
     }
 }, {

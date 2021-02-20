@@ -29,14 +29,15 @@ function Store(storeID, userID, storeName, description, stars) {
     this.stars = stars;
 }
 
-function Review(reviewID, userID, storeID, postDate, content, storeRating, score) {
-    this.reviewID = reviewID;
-    this.userID = userID;
-    this.storeID = storeID;
+function Review(reviewID, userID, storeID, postDate, content, storeRating, score, edited) {
+    this.reviewID = parseInt(reviewID);
+    this.userID = parseInt(userID);
+    this.storeID = parseInt(storeID);
     this.postDate = new Date(postDate);
     this.content = content;
-    this.storeRating = storeRating;
-    this.score = score;
+    this.storeRating = parseInt(storeRating);
+    this.score = parseInt(score);
+    this.edited = edited
 }
 
 function Comment(commentID, userID, reviewID, content) {
@@ -45,6 +46,48 @@ function Comment(commentID, userID, reviewID, content) {
     this.reviewID = reviewID;
     this.content = content;
 }
+
+async function getMinMaxReviewID(sortby, offset) {
+    //sortby - min = 1, max = -1
+    //offset - adds userad by offset
+    var ID = await reviewModel.aggregate([{
+        '$sort': {
+            'reviewID': sortby
+        }
+    }, {
+        '$limit': 1
+    }, {
+        '$project': {
+            'reviewID': 1
+        }
+    }]);
+    return ID[0].reviewID + offset;
+}
+
+async function getUpdatedRating(storeID){
+    var average = await reviewModel.aggregate([
+        {
+          '$match': {
+            'storeID': parseInt(storeID)
+          }
+        }, {
+          '$group': {
+            '_id': '$storeID', 
+            'average': {
+              '$push': '$storeRating'
+            }
+          }
+        }, {
+          '$project': {
+            'average': {
+              '$avg': '$average'
+            }
+          }
+        }
+      ]);
+      return parseInt(average[0].average);
+}
+
 async function getMinMaxUserID(sortby, offset) {
     //sortby - min = 1, max = -1
     //offset - adds userad by offset
@@ -275,7 +318,7 @@ const indexFunctions = {
                 }
             }]);
             var reviewed = false;
-            if(myReview[0])
+            if (myReview[0])
                 reviewed = true;
             res.render('store', {
                 name: req.session.logUser.username,
@@ -286,7 +329,7 @@ const indexFunctions = {
                 userID: req.session.logUser.userID,
                 storeOwner: req.session.logUser.isStoreOwner,
                 storeName: store.storeName,
-                stars:store.stars,
+                stars: store.stars,
                 storeID: storeID,
                 description: store.description,
                 reviewed: reviewed,
@@ -323,7 +366,7 @@ const indexFunctions = {
                 guest: true,
                 userID: store.userID,
                 storeName: store.storeName,
-                stars:store.stars,
+                stars: store.stars,
                 description: store.description,
                 reviews: reviews,
             });
@@ -423,8 +466,8 @@ const indexFunctions = {
             var store = new Store(storeID, userID, storeName, storeDesc, 0);
             var newStore = new storeModel(store);
             var result = await newStore.recordStore();
-            console.log('postStoreSignup result:');
-            console.log(result);
+            // console.log('postStoreSignup result:');
+            // console.log(result);
             if (result) {
                 await userModel.findOneAndUpdate({
                     userID: userID
@@ -459,6 +502,71 @@ const indexFunctions = {
         req.session.logUser.username = username;
         req.session.logUser.bio = bio;
         res.send();
+    },
+
+    postMyReview: async function (req, res) {
+        var reviewID = await getMinMaxReviewID(-1, 1);
+        var userID = req.session.logUser.userID;
+        var {
+            storeID,
+            rating,
+            content
+        } = req.body;
+        var postDate = new Date();
+
+        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
+        var newReview = new reviewModel(review);
+        console.log(newReview);
+        var result = await newReview.recordReview();
+        console.log(result);
+
+        await getUpdatedRating(storeID);
+        res.send({
+            status: 200,
+            msg: 'Review Submitted'
+        });
+    },
+    postEditedReview: async function (req, res) {
+        var reviewID = await getMinMaxReviewID(-1, 1);
+        var userID = req.session.logUser.userID;
+        var {
+            storeID,
+            rating,
+            content
+        } = req.body;
+        var postDate = new Date();
+
+        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
+        var newReview = new reviewModel(review);
+        console.log(newReview);
+        var result = await newReview.recordReview();
+        console.log(result);
+
+        res.send({
+            status: 200,
+            msg: 'Review Submitted'
+        });
+    },
+    postDeletedReview: async function (req, res) {
+        var reviewID = await getMinMaxReviewID(-1, 1);
+        var userID = req.session.logUser.userID;
+        var {
+            storeID,
+            rating,
+            content
+        } = req.body;
+        var postDate = new Date();
+
+        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
+        var newReview = new reviewModel(review);
+        console.log(newReview);
+        var result = await newReview.recordReview();
+        console.log(result);
+
+        res.send({
+            status: 200,
+            msg: 'Review Submitted'
+        });
     },
 }
 module.exports = indexFunctions;
