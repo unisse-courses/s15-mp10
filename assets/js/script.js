@@ -31,6 +31,33 @@ function submitReview(storeID) {
     }
 
 }
+
+function deleteReview(reviewID, storeID) {
+    
+    console.log(reviewID);
+    console.log(storeID);
+    location.reload();
+    // $.post('/submitReview', {
+    //     storeID: storeID,
+    //     rating: rating,
+    //     content: content
+    // }, function (res) {
+    //     switch (res.status) {
+    //         case 200:
+    //             //successful review submit
+    //             alert(res.msg);
+    //             //update store rating
+
+    //             //reload page to show changes
+    //             location.reload();
+    //             break;
+    //         case 500:
+    //             alert('Something went wrong. Review not submitted.');
+    //             break;
+    //     }
+    // });
+
+}
 (function ($) {
 
     $(function () {

@@ -45,6 +45,10 @@ const reviewSchema = new mongoose.Schema({
     edited: {
         type: Boolean,
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        required: true
     }
 }, {
     collection: "Reviews"

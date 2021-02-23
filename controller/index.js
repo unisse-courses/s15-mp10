@@ -29,7 +29,7 @@ function Store(storeID, userID, storeName, description, stars) {
     this.stars = stars;
 }
 
-function Review(reviewID, userID, storeID, postDate, content, storeRating, score, edited) {
+function Review(reviewID, userID, storeID, postDate, content, storeRating, score, edited, deleted) {
     this.reviewID = parseInt(reviewID);
     this.userID = parseInt(userID);
     this.storeID = parseInt(storeID);
@@ -37,7 +37,8 @@ function Review(reviewID, userID, storeID, postDate, content, storeRating, score
     this.content = content;
     this.storeRating = parseInt(storeRating);
     this.score = parseInt(score);
-    this.edited = edited
+    this.edited = edited;
+    this.deleted = deleted;
 }
 
 function Comment(commentID, userID, reviewID, content) {
@@ -68,7 +69,8 @@ async function getUpdatedRating(storeID){
     var average = await reviewModel.aggregate([
         {
           '$match': {
-            'storeID': parseInt(storeID)
+            'storeID': parseInt(storeID),
+            'deleted': false
           }
         }, {
           '$group': {
@@ -514,55 +516,32 @@ const indexFunctions = {
         } = req.body;
         var postDate = new Date();
 
-        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
+        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false, false);
         var newReview = new reviewModel(review);
-        console.log(newReview);
-        var result = await newReview.recordReview();
-        console.log(result);
+        await newReview.recordReview();
 
-        await getUpdatedRating(storeID);
+        var stars = await getUpdatedRating(storeID);
+        await storeModel.findOneAndUpdate({storeID:storeID}, {stars:stars});
+        
         res.send({
             status: 200,
             msg: 'Review Submitted'
         });
     },
     postEditedReview: async function (req, res) {
-        var reviewID = await getMinMaxReviewID(-1, 1);
-        var userID = req.session.logUser.userID;
-        var {
-            storeID,
-            rating,
-            content
-        } = req.body;
-        var postDate = new Date();
-
-        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
-        var newReview = new reviewModel(review);
-        console.log(newReview);
-        var result = await newReview.recordReview();
-        console.log(result);
-
-        res.send({
-            status: 200,
-            msg: 'Review Submitted'
-        });
+        
     },
     postDeletedReview: async function (req, res) {
-        var reviewID = await getMinMaxReviewID(-1, 1);
-        var userID = req.session.logUser.userID;
         var {
-            storeID,
-            rating,
-            content
+            reviewID,
+            storeID
         } = req.body;
-        var postDate = new Date();
 
-        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false);
-        var newReview = new reviewModel(review);
-        console.log(newReview);
-        var result = await newReview.recordReview();
-        console.log(result);
+        await reviewModel.findOneAndUpdate({reviewID: reviewID}, {userID: 0, content:'[DELETED]', deleted: true});
 
+        var stars = await getUpdatedRating(storeID);
+        await storeModel.findOneAndUpdate({storeID:storeID}, {stars:stars});
+        
         res.send({
             status: 200,
             msg: 'Review Submitted'

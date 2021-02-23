@@ -98,7 +98,6 @@
                     <div class="col-3 d-flex justify-content-end align-items-center btn-group" role="group">
                         <button type="button" class="btn btn-outline-success" data-toggle="modal"
                             data-target="#myReview_Edit">Edit</button>
-
                         <div class="modal fade" id="myReview_Edit" tabindex="-1" role="dialog"
                             aria-labelledby="myReview_EditTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -134,7 +133,6 @@
 
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                             data-target="#myReview_Delete">Delete</button>
-
                         <div class="modal fade" id="myReview_Delete" tabindex="-1" role="dialog"
                             aria-labelledby="myReview_DeleteTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -150,7 +148,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <button type="button" class="btn btn-danger">Yes</button>
+                                        <button type="button" class="btn btn-danger" onclick="deleteReview({{myReview.reviewID}},{{storeID}})">Yes</button>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +191,6 @@
                     <div class="col-7 d-flex justify-content-end">
                         <select class="custom-select" id="myReview_NewRating">
                             <option selected>Rating...</option>
-                            <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
