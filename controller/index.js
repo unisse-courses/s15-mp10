@@ -65,29 +65,30 @@ async function getMinMaxReviewID(sortby, offset) {
     return ID[0].reviewID + offset;
 }
 
-async function getUpdatedRating(storeID){
-    var average = await reviewModel.aggregate([
-        {
-          '$match': {
+async function getUpdatedRating(storeID) {
+    var average = await reviewModel.aggregate([{
+        '$match': {
             'storeID': parseInt(storeID),
             'deleted': false
-          }
-        }, {
-          '$group': {
-            '_id': '$storeID', 
-            'average': {
-              '$push': '$storeRating'
-            }
-          }
-        }, {
-          '$project': {
-            'average': {
-              '$avg': '$average'
-            }
-          }
         }
-      ]);
-      return parseInt(average[0].average);
+    }, {
+        '$group': {
+            '_id': '$storeID',
+            'average': {
+                '$push': '$storeRating'
+            }
+        }
+    }, {
+        '$project': {
+            'average': {
+                '$avg': '$average'
+            }
+        }
+    }]);
+    if (average[0])
+        return parseInt(average[0].average);
+    else
+        return 0;
 }
 
 async function getMinMaxUserID(sortby, offset) {
@@ -270,9 +271,13 @@ const indexFunctions = {
             var reviews = await reviewModel.aggregate([{
                 '$match': {
                     'storeID': parseInt(storeID),
-                    'userID': {
-                        '$ne': req.session.logUser.userID
-                    }
+                    '$or': [{
+                        'userID': {
+                            '$ne': req.session.logUser.userID
+                        }
+                    }, {
+                        'deleted': true
+                    }]
                 }
             }, {
                 '$lookup': {
@@ -297,7 +302,8 @@ const indexFunctions = {
             var myReview = await reviewModel.aggregate([{
                 '$match': {
                     'storeID': parseInt(storeID),
-                    'userID': req.session.logUser.userID
+                    'userID': req.session.logUser.userID,
+                    'deleted': false
                 }
             }, {
                 '$lookup': {
@@ -507,45 +513,111 @@ const indexFunctions = {
     },
 
     postMyReview: async function (req, res) {
-        var reviewID = await getMinMaxReviewID(-1, 1);
-        var userID = req.session.logUser.userID;
-        var {
-            storeID,
-            rating,
-            content
-        } = req.body;
-        var postDate = new Date();
+        try {
+            var reviewID = await getMinMaxReviewID(-1, 1);
+            var userID = req.session.logUser.userID;
+            var {
+                storeID,
+                rating,
+                content
+            } = req.body;
+            var postDate = new Date();
 
-        var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false, false);
-        var newReview = new reviewModel(review);
-        await newReview.recordReview();
+            var review = new Review(reviewID, userID, storeID, postDate, content, rating, 0, false, false);
+            var newReview = new reviewModel(review);
+            await newReview.recordReview();
 
-        var stars = await getUpdatedRating(storeID);
-        await storeModel.findOneAndUpdate({storeID:storeID}, {stars:stars});
-        
-        res.send({
-            status: 200,
-            msg: 'Review Submitted'
-        });
+            var stars = await getUpdatedRating(storeID);
+            await storeModel.findOneAndUpdate({
+                storeID: storeID
+            }, {
+                stars: stars
+            });
+
+            res.send({
+                status: 200,
+                msg: 'Review Submitted'
+            });
+        } catch {
+            res.send({
+                status: 500
+            });
+        }
     },
     postEditedReview: async function (req, res) {
-        
+        try {
+            var {
+                reviewID,
+                storeID,
+                rating,
+                content
+            } = req.body;
+            var editDate = new Date();
+
+            await reviewModel.findOneAndUpdate({
+                reviewID: reviewID
+            }
+            // ,
+            //  {
+            //     content: content,
+            //     storeRating: rating,
+            //     postDate: editDate,
+            //     edited: true,
+                
+                
+            // }
+            ,
+            [{$push:{testing:'aaaaaaaaaaaaaa'}}]
+            );
+
+            var stars = await getUpdatedRating(storeID);
+            await storeModel.findOneAndUpdate({
+                storeID: storeID
+            }, {
+                stars: stars
+            });
+
+            res.send({
+                status: 200,
+                msg: 'Review Edited'
+            });
+        } catch (e) {
+            console.log(e);
+            res.send({
+                status: 500
+            });
+        }
     },
     postDeletedReview: async function (req, res) {
-        var {
-            reviewID,
-            storeID
-        } = req.body;
+        try {
+            var {
+                reviewID,
+                storeID
+            } = req.body;
 
-        await reviewModel.findOneAndUpdate({reviewID: reviewID}, {userID: 0, content:'[DELETED]', deleted: true});
+            await reviewModel.findOneAndUpdate({
+                reviewID: reviewID
+            }, {
+                content: '[DELETED]',
+                deleted: true
+            });
 
-        var stars = await getUpdatedRating(storeID);
-        await storeModel.findOneAndUpdate({storeID:storeID}, {stars:stars});
-        
-        res.send({
-            status: 200,
-            msg: 'Review Submitted'
-        });
+            var stars = await getUpdatedRating(storeID);
+            await storeModel.findOneAndUpdate({
+                storeID: storeID
+            }, {
+                stars: stars
+            });
+
+            res.send({
+                status: 200,
+                msg: 'Review Deleted'
+            });
+        } catch {
+            res.send({
+                status: 500
+            });
+        }
     },
 }
 module.exports = indexFunctions;

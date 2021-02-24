@@ -111,10 +111,10 @@
                                     <div class="modal-body">
                                         <textarea style="overflow:auto;resize:none" rows="13" cols="20;"
                                             class="form-control mt-2" rows="3" id="myReview_EditContent"
-                                            placeholder="Enter your review"></textarea>
+                                            placeholder="Enter your review">{{myReview.content}}</textarea>
                                         <select class="custom-select" id="myReview_EditRating">
-                                            <option selected>Rating...</option>
-                                            <option value="0">0</option>
+                                            <option value"{{myReview.storeRating}}" selected>{{myReview.storeRating}}
+                                            </option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -125,7 +125,9 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-success">Save changes</button>
+                                        <button type="button" class="btn btn-success"
+                                            onclick="editReview({{myReview.reviewID}},{{storeID}})">Save
+                                            changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +150,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <button type="button" class="btn btn-danger" onclick="deleteReview({{myReview.reviewID}},{{storeID}})">Yes</button>
+                                        <button type="button" class="btn btn-danger"
+                                            onclick="deleteReview({{myReview.reviewID}},{{storeID}})">Yes</button>
                                     </div>
                                 </div>
                             </div>
@@ -185,8 +188,8 @@
             <div>
                 <div class="row">
                     <div class="col-5">
-                        <button onclick="submitReview({{storeID}})" type="button"
-                            class="btn btn-lg btn-success m-1" id="myReview_Submit" >Submit</button>
+                        <button onclick="submitReview({{storeID}})" type="button" class="btn btn-lg btn-success m-1"
+                            id="myReview_Submit">Submit</button>
                     </div>
                     <div class="col-7 d-flex justify-content-end">
                         <select class="custom-select" id="myReview_NewRating">

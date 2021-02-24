@@ -17,4 +17,6 @@ router.post('/storeSignup_store', controller.postStoreSignup);
 router.post('/userProf_edit', indexMiddleware.validateUserEdit, controller.postUserEdit);
 
 router.post('/submitReview', controller.postMyReview);
+router.post('/deleteReview', controller.postDeletedReview);
+router.post('/editReview', controller.postEditedReview);
 module.exports = router;

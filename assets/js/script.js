@@ -13,11 +13,6 @@ function submitReview(storeID) {
             }, function (res) {
                 switch (res.status) {
                     case 200:
-                        //successful review submit
-                        alert(res.msg);
-                        //update store rating
-
-                        //reload page to show changes
                         location.reload();
                         break;
                     case 500:
@@ -33,30 +28,48 @@ function submitReview(storeID) {
 }
 
 function deleteReview(reviewID, storeID) {
-    
-    console.log(reviewID);
-    console.log(storeID);
-    location.reload();
-    // $.post('/submitReview', {
-    //     storeID: storeID,
-    //     rating: rating,
-    //     content: content
-    // }, function (res) {
-    //     switch (res.status) {
-    //         case 200:
-    //             //successful review submit
-    //             alert(res.msg);
-    //             //update store rating
+    $.post('/deleteReview', {
+        reviewID: reviewID,
+        storeID: storeID
+    }, function (res) {
+        switch (res.status) {
+            case 200:
+                location.reload();
+                break;
+            case 500:
+                alert('Something went wrong. Review not deleted.');
+                break;
+        }
+    });
+}
 
-    //             //reload page to show changes
-    //             location.reload();
-    //             break;
-    //         case 500:
-    //             alert('Something went wrong. Review not submitted.');
-    //             break;
-    //     }
-    // });
+function editReview(reviewID, storeID) {
+    var rating = parseInt($('#myReview_EditRating').val());
+    var content = $('#myReview_EditContent').val();
 
+    if (validator.isEmpty(content)) {
+        alert('Please provide a review');
+    } else {
+        if (rating) { //check if rating is given
+            $.post('/editReview', {
+                reviewID: reviewID,
+                storeID: storeID,
+                rating: rating,
+                content: content
+            }, function (res) {
+                switch (res.status) {
+                    case 200:
+                        location.reload();
+                        break;
+                    case 500:
+                        alert('Something went wrong. Review not edited.');
+                        break;
+                }
+            });
+        } else { //otherwise deny posting
+            alert('Please rate the store');
+        }
+    }
 }
 (function ($) {
 
