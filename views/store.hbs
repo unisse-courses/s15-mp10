@@ -81,6 +81,8 @@
             </div>
         </div>
         {{else}}
+        {{#if owner}}
+        {{else}}
         {{#if reviewed}}
         <div class="m-3 p-3">
             <hr>
@@ -206,6 +208,7 @@
         </div>
         {{/if}}
         {{/if}}
+        {{/if}}
         <!-- reviews for the store -->
 
         <div class="container">
@@ -219,10 +222,10 @@
                     </div>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Newest</a>
-                    <a class="dropdown-item" href="#">Oldest</a>
-                    <a class="dropdown-item" href="#">Most Approved</a><!-- most amount of points -->
-                    <a class="dropdown-item" href="#">Least Approved</a><!-- least amount of points -->
+                    <button class="dropdown-item" onclick="newest()">Newest</button>
+                    <button class="dropdown-item" onclick="oldest()">Oldest</button>
+                    <button class="dropdown-item" onclick="mostApproved()">Most Approved</button><!-- most amount of points -->
+                    <button class="dropdown-item" onclick="leastApproved()">Least Approved</button><!-- least amount of points -->
                 </div>
             </div>
 

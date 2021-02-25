@@ -1,3 +1,27 @@
+function newest(){
+    $.post('/userSettings/sortReview/1', function () {
+        location.reload();
+    });
+}
+
+function oldest(){
+    $.post('/userSettings/sortReview/2', function () {
+        location.reload();
+    });
+}
+
+function mostApproved(){
+    $.post('/userSettings/sortReview/3', function () {
+        location.reload();
+    });
+}
+
+function leastApproved(){
+    $.post('/userSettings/sortReview/4', function () {
+        location.reload();
+    });
+}
+
 function submitReview(storeID) {
     var rating = parseInt($('#myReview_NewRating').val());
     var content = $('#myReview_NewContent').val();

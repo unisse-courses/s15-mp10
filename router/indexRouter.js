@@ -19,4 +19,9 @@ router.post('/userProf_edit', indexMiddleware.validateUserEdit, controller.postU
 router.post('/submitReview', controller.postMyReview);
 router.post('/deleteReview', controller.postDeletedReview);
 router.post('/editReview', controller.postEditedReview);
+
+/*
+    USER SETTINGS
+*/
+router.post('/userSettings/sortReview/:option', controller.postUserSettings_sortReview);
 module.exports = router;

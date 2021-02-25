@@ -48,6 +48,289 @@ function Comment(commentID, userID, reviewID, content) {
     this.content = content;
 }
 
+async function newestReviews(storeID, userID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+            '$or': [{
+                'userID': {
+                    '$ne': userID
+                }
+            }, {
+                'deleted': true
+            }]
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'postDate': -1
+        }
+    }]);
+}
+async function newestReviews(storeID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'postDate': -1
+        }
+    }]);
+}
+
+async function oldestReviews(storeID, userID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+            '$or': [{
+                'userID': {
+                    '$ne': userID
+                }
+            }, {
+                'deleted': true
+            }]
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'postDate': 1
+        }
+    }]);
+}
+async function oldestReviews(storeID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'postDate': 1
+        }
+    }]);
+}
+
+async function mostApprovedReviews(storeID, userID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+            '$or': [{
+                'userID': {
+                    '$ne': userID
+                }
+            }, {
+                'deleted': true
+            }]
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'score': -1
+        }
+    }]);
+}
+async function mostApprovedReviews(storeID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'score': -1
+        }
+    }]);
+}
+
+async function leastApprovedReviews(storeID, userID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+            '$or': [{
+                'userID': {
+                    '$ne': userID
+                }
+            }, {
+                'deleted': true
+            }]
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'score': 1
+        }
+    }]);
+}
+async function leastApprovedReviews(storeID) {
+    return await reviewModel.aggregate([{
+        '$match': {
+            'storeID': parseInt(storeID),
+        }
+    }, {
+        '$lookup': {
+            'from': 'Comments',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'comments'
+        }
+    }, {
+        '$lookup': {
+            'from': 'Users',
+            'localField': 'userID',
+            'foreignField': 'userID',
+            'as': 'name'
+        }
+    }, {
+        '$unwind': {
+            'path': '$name',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$sort': {
+            'score': 1
+        }
+    }]);
+}
+
+async function isOwner(storeID, userID) {
+    var store = await storeModel.findOne({
+        storeID: storeID
+    });
+    if (store.userID == userID) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 async function getMinMaxReviewID(sortby, offset) {
     //sortby - min = 1, max = -1
     //offset - adds userad by offset
@@ -133,6 +416,14 @@ async function getMinMaxStoreID(sortby, offset) {
 //     return finalUrl;
 // }
 const indexFunctions = {
+    /*
+     USER SETTINGS FUNCTIONS
+     */
+    postUserSettings_sortReview: function (req, res) {
+        req.session.userSettings.sortReview = parseInt(req.params.option);
+        res.send();
+    },
+
     getHomepage: async function (req, res) {
         /**DEBUG */
         // console.log('homepage: ');
@@ -263,42 +554,37 @@ const indexFunctions = {
         }
     },
     getStore: async function (req, res) {
+        try { //initialize settings if not found
+            console.log(req.session.userSettings.sortReview);
+        } catch {
+            console.log('Required settings not found. Initializing settings.');
+            req.session.userSettings = {
+                sortReview: 1
+            }
+        }
         var storeID = req.params.storeID;
         var store = await storeModel.findOne({
             storeID: storeID
         });
+
         if (req.session.type) { // check if user is logged in
-            var reviews = await reviewModel.aggregate([{
-                '$match': {
-                    'storeID': parseInt(storeID),
-                    '$or': [{
-                        'userID': {
-                            '$ne': req.session.logUser.userID
-                        }
-                    }, {
-                        'deleted': true
-                    }]
-                }
-            }, {
-                '$lookup': {
-                    'from': 'Comments',
-                    'localField': 'reviewID',
-                    'foreignField': 'reviewID',
-                    'as': 'comments'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'Users',
-                    'localField': 'userID',
-                    'foreignField': 'userID',
-                    'as': 'name'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$name',
-                    'preserveNullAndEmptyArrays': true
-                }
-            }]);
+            switch (req.session.userSettings.sortReview) {
+                case 1:
+                    var reviews = await newestReviews(storeID, req.session.logUser.userID);
+                    break;
+                case 2:
+                    var reviews = await oldestReviews(storeID, req.session.logUser.userID);
+                    break;
+                case 3:
+                    var reviews = await mostApprovedReviews(storeID, req.session.logUser.userID);
+                    break;
+                case 4:
+                    var reviews = await leastApprovedReviews(storeID, req.session.logUser.userID);
+                    break;
+                default:
+                    console.log('Something went wrong');
+                    break;
+            }
             var myReview = await reviewModel.aggregate([{
                 '$match': {
                     'storeID': parseInt(storeID),
@@ -328,6 +614,8 @@ const indexFunctions = {
             var reviewed = false;
             if (myReview[0])
                 reviewed = true;
+
+            var owner = await isOwner(storeID, req.session.logUser.userID);
             res.render('store', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
@@ -343,32 +631,26 @@ const indexFunctions = {
                 reviewed: reviewed,
                 reviews: reviews,
                 myReview: myReview[0],
+                owner: owner,
             });
         } else {
-            var reviews = await reviewModel.aggregate([{
-                '$match': {
-                    'storeID': parseInt(storeID),
-                }
-            }, {
-                '$lookup': {
-                    'from': 'Comments',
-                    'localField': 'reviewID',
-                    'foreignField': 'reviewID',
-                    'as': 'comments'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'Users',
-                    'localField': 'userID',
-                    'foreignField': 'userID',
-                    'as': 'name'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$name',
-                    'preserveNullAndEmptyArrays': true
-                }
-            }]);
+            switch (req.session.userSettings.sortReview) {
+                case 1:
+                    var reviews = await newestReviews(storeID);
+                    break;
+                case 2:
+                    var reviews = await oldestReviews(storeID);
+                    break;
+                case 3:
+                    var reviews = await mostApprovedReviews(storeID);
+                    break;
+                case 4:
+                    var reviews = await leastApprovedReviews(storeID);
+                    break;
+                default:
+                    console.log('Something went wrong');
+                    break;
+            }
             res.render('store', {
                 title: 'Store',
                 guest: true,
@@ -555,19 +837,23 @@ const indexFunctions = {
             var editDate = new Date();
 
             await reviewModel.findOneAndUpdate({
-                reviewID: reviewID
-            }
-            // ,
-            //  {
-            //     content: content,
-            //     storeRating: rating,
-            //     postDate: editDate,
-            //     edited: true,
-                
-                
-            // }
-            ,
-            [{$push:{testing:'aaaaaaaaaaaaaa'}}]
+                    reviewID: reviewID
+                }
+                // ,
+                //  {
+                //     content: content,
+                //     storeRating: rating,
+                //     postDate: editDate,
+                //     edited: true,
+
+
+                // }
+                ,
+                [{
+                    $push: {
+                        testing: 'aaaaaaaaaaaaaa'
+                    }
+                }]
             );
 
             var stars = await getUpdatedRating(storeID);
