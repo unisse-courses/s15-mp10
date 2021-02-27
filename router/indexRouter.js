@@ -20,6 +20,11 @@ router.post('/submitReview', controller.postMyReview);
 router.post('/deleteReview', controller.postDeletedReview);
 router.post('/editReview', controller.postEditedReview);
 
+router.post('/scoreUp/:reviewID',indexMiddleware.validateScoreUp, controller.postScoreUp);
+router.post('/scoreDown/:reviewID',indexMiddleware.validateScoreDown, controller.postScoreDown);
+
+router.post('/submitComment', controller.postMyComment);
+
 /*
     USER SETTINGS
 */

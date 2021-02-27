@@ -1,22 +1,43 @@
-function newest(){
+function submitComment(reviewID){
+    var comment = $('#reply'+reviewID+'_Content').val();
+     if(validator.isEmpty(comment)){
+        alert('Please provide a comment');
+     }else{
+        $.post('/submitComment', {reviewID:reviewID, comment:comment}, function(){});
+     }
+}
+
+function scoreUp(reviewID) {
+    $.post('/scoreUp/'+ reviewID, function () {
+        location.reload();
+    });
+}
+
+function scoreDown(reviewID) {
+    $.post('/scoreDown/'+ reviewID, function () {
+        location.reload();
+    });
+}
+
+function newest() {
     $.post('/userSettings/sortReview/1', function () {
         location.reload();
     });
 }
 
-function oldest(){
+function oldest() {
     $.post('/userSettings/sortReview/2', function () {
         location.reload();
     });
 }
 
-function mostApproved(){
+function mostApproved() {
     $.post('/userSettings/sortReview/3', function () {
         location.reload();
     });
 }
 
-function leastApproved(){
+function leastApproved() {
     $.post('/userSettings/sortReview/4', function () {
         location.reload();
     });

@@ -169,7 +169,33 @@
                     {{else}}
                     <small class="text-secondary">{{getDate myReview.postDate}}</small>
                     {{/if}}
-                    <button class="btn btn-outline-success">Reply</button>
+                    <button type="button" class="btn btn-outline-success" data-toggle="modal"
+                        data-target="#reply{{myReview.reviewID}}">
+                        Reply
+                    </button>
+                    <div class="modal fade" id="reply{{myReview.reviewID}}" tabindex="-1" role="dialog"
+                        aria-labelledby="reply{{myReview.reviewID}}CenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reply{{myReview.reviewID}}LongTitle">Post a comment</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea style="overflow:auto;resize:none" rows="13" cols="20;"
+                                        class="form-control mt-2" rows="3" id="reply{{myReview.reviewID}}_Content"
+                                        placeholder="Enter your comment"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success"
+                                        onclick="submitComment({{myReview.reviewID}})">Post Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -224,15 +250,25 @@
                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
                     <button class="dropdown-item" onclick="newest()">Newest</button>
                     <button class="dropdown-item" onclick="oldest()">Oldest</button>
-                    <button class="dropdown-item" onclick="mostApproved()">Most Approved</button><!-- most amount of points -->
-                    <button class="dropdown-item" onclick="leastApproved()">Least Approved</button><!-- least amount of points -->
+                    <button class="dropdown-item" onclick="mostApproved()">Most Approved</button>
+                    <!-- most amount of points -->
+                    <button class="dropdown-item" onclick="leastApproved()">Least Approved</button>
+                    <!-- least amount of points -->
                 </div>
             </div>
 
             <div>
+
+                {{#if guest}}
                 {{#each reviews}}
-                {{>store_review this}}
+                {{>store_reviewGuest this}}
                 {{/each}}
+                {{else}}
+                {{#each reviews}}
+                {{>store_reviewUser this}}
+                {{/each}}
+                {{/if}}
+
 
             </div>
         </div>

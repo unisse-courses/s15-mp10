@@ -8,9 +8,13 @@ const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
 const sentImageModel = require('../models/sentImagesdb');
 const reviewsModel = require('../models/reviewsdb');
+const reviewScoreModel = require('../models/reviewScoresdb');
 const {
     isRegExp
 } = require('util');
+const {
+    findOneAndUpdate
+} = require('../models/usersdb');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -41,6 +45,12 @@ function Review(reviewID, userID, storeID, postDate, content, storeRating, score
     this.deleted = deleted;
 }
 
+function reviewScore(reviewID, userID, score) {
+    this.reviewID = parseInt(reviewID);
+    this.userID = parseInt(userID);
+    this.score = parseInt(score);
+}
+
 function Comment(commentID, userID, reviewID, content) {
     this.commentID = commentID;
     this.userID = userID;
@@ -48,13 +58,48 @@ function Comment(commentID, userID, reviewID, content) {
     this.content = content;
 }
 
-async function newestReviews(storeID, userID) {
+async function getScore(reviewID) {
+    var score = await reviewsModel.aggregate([{
+        '$match': {
+            'reviewID': parseInt(reviewID)
+        }
+    }, {
+        '$lookup': {
+            'from': 'ReviewScores',
+            'localField': 'reviewID',
+            'foreignField': 'reviewID',
+            'as': 'scoresDta'
+        }
+    }, {
+        '$unwind': {
+            'path': '$scoresDta',
+            'preserveNullAndEmptyArrays': true
+        }
+    }, {
+        '$group': {
+            '_id': '$reviewID',
+            'scores': {
+                '$push': '$scoresDta.score'
+            }
+        }
+    }, {
+        '$project': {
+            'score': {
+                '$sum': '$scores'
+            }
+        }
+    }]);
+
+    return score[0].score;
+}
+
+async function newestReviews_User(storeID, userID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
             '$or': [{
                 'userID': {
-                    '$ne': userID
+                    '$ne': parseInt(userID)
                 }
             }, {
                 'deleted': true
@@ -85,7 +130,7 @@ async function newestReviews(storeID, userID) {
         }
     }]);
 }
-async function newestReviews(storeID) {
+async function newestReviews_Guest(storeID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
@@ -116,13 +161,13 @@ async function newestReviews(storeID) {
     }]);
 }
 
-async function oldestReviews(storeID, userID) {
+async function oldestReviews_User(storeID, userID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
             '$or': [{
                 'userID': {
-                    '$ne': userID
+                    '$ne': parseInt(userID)
                 }
             }, {
                 'deleted': true
@@ -153,7 +198,7 @@ async function oldestReviews(storeID, userID) {
         }
     }]);
 }
-async function oldestReviews(storeID) {
+async function oldestReviews_Guest(storeID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
@@ -184,13 +229,13 @@ async function oldestReviews(storeID) {
     }]);
 }
 
-async function mostApprovedReviews(storeID, userID) {
+async function mostApprovedReviews_User(storeID, userID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
             '$or': [{
                 'userID': {
-                    '$ne': userID
+                    '$ne': parseInt(userID)
                 }
             }, {
                 'deleted': true
@@ -221,7 +266,7 @@ async function mostApprovedReviews(storeID, userID) {
         }
     }]);
 }
-async function mostApprovedReviews(storeID) {
+async function mostApprovedReviews_Guest(storeID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
@@ -252,13 +297,13 @@ async function mostApprovedReviews(storeID) {
     }]);
 }
 
-async function leastApprovedReviews(storeID, userID) {
+async function leastApprovedReviews_User(storeID, userID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
             '$or': [{
                 'userID': {
-                    '$ne': userID
+                    '$ne': parseInt(userID)
                 }
             }, {
                 'deleted': true
@@ -289,7 +334,7 @@ async function leastApprovedReviews(storeID, userID) {
         }
     }]);
 }
-async function leastApprovedReviews(storeID) {
+async function leastApprovedReviews_Guest(storeID) {
     return await reviewModel.aggregate([{
         '$match': {
             'storeID': parseInt(storeID),
@@ -332,20 +377,45 @@ async function isOwner(storeID, userID) {
 }
 
 async function getMinMaxReviewID(sortby, offset) {
-    //sortby - min = 1, max = -1
-    //offset - adds userad by offset
-    var ID = await reviewModel.aggregate([{
-        '$sort': {
-            'reviewID': sortby
-        }
-    }, {
-        '$limit': 1
-    }, {
-        '$project': {
-            'reviewID': 1
-        }
-    }]);
-    return ID[0].reviewID + offset;
+    try {
+        //sortby - min = 1, max = -1
+        //offset - adds userad by offset
+        var ID = await reviewModel.aggregate([{
+            '$sort': {
+                'reviewID': sortby
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$project': {
+                'reviewID': 1
+            }
+        }]);
+        return ID[0].reviewID + offset;
+    } catch {
+        return 3000;
+    }
+}
+
+async function getMinMaxCommentID(sortby, offset) {
+    try {
+        //sortby - min = 1, max = -1
+        //offset - adds userad by offset
+        var ID = await commentModel.aggregate([{
+            '$sort': {
+                'commentID': sortby
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$project': {
+                'commentID': 1
+            }
+        }]);
+        return ID[0].commentID + offset;
+    } catch {
+        return 4000;
+    }
 }
 
 async function getUpdatedRating(storeID) {
@@ -375,36 +445,44 @@ async function getUpdatedRating(storeID) {
 }
 
 async function getMinMaxUserID(sortby, offset) {
-    //sortby - min = 1, max = -1
-    //offset - adds userad by offset
-    var highestID = await userModel.aggregate([{
-        '$sort': {
-            'userID': sortby
-        }
-    }, {
-        '$limit': 1
-    }, {
-        '$project': {
-            'userID': 1
-        }
-    }]);
-    return highestID[0].userID + offset;
+    try {
+        //sortby - min = 1, max = -1
+        //offset - adds userad by offset
+        var highestID = await userModel.aggregate([{
+            '$sort': {
+                'userID': sortby
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$project': {
+                'userID': 1
+            }
+        }]);
+        return highestID[0].userID + offset;
+    } catch {
+        return 1000;
+    }
 }
 async function getMinMaxStoreID(sortby, offset) {
-    //sortby - min = 1, max = -1
-    //offset - adds userad by offset
-    var highestID = await storeModel.aggregate([{
-        '$sort': {
-            'storeID': sortby
-        }
-    }, {
-        '$limit': 1
-    }, {
-        '$project': {
-            'storeID': 1
-        }
-    }]);
-    return highestID[0].storeID + offset;
+    try {
+        //sortby - min = 1, max = -1
+        //offset - adds userad by offset
+        var highestID = await storeModel.aggregate([{
+            '$sort': {
+                'storeID': sortby
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$project': {
+                'storeID': 1
+            }
+        }]);
+        return highestID[0].storeID + offset;
+    } catch {
+        return 2000;
+    }
 }
 
 // function createActionUrl(url, actions) {
@@ -570,16 +648,16 @@ const indexFunctions = {
         if (req.session.type) { // check if user is logged in
             switch (req.session.userSettings.sortReview) {
                 case 1:
-                    var reviews = await newestReviews(storeID, req.session.logUser.userID);
+                    var reviews = await newestReviews_User(storeID, req.session.logUser.userID);
                     break;
                 case 2:
-                    var reviews = await oldestReviews(storeID, req.session.logUser.userID);
+                    var reviews = await oldestReviews_User(storeID, req.session.logUser.userID);
                     break;
                 case 3:
-                    var reviews = await mostApprovedReviews(storeID, req.session.logUser.userID);
+                    var reviews = await mostApprovedReviews_User(storeID, req.session.logUser.userID);
                     break;
                 case 4:
-                    var reviews = await leastApprovedReviews(storeID, req.session.logUser.userID);
+                    var reviews = await leastApprovedReviews_User(storeID, req.session.logUser.userID);
                     break;
                 default:
                     console.log('Something went wrong');
@@ -636,16 +714,16 @@ const indexFunctions = {
         } else {
             switch (req.session.userSettings.sortReview) {
                 case 1:
-                    var reviews = await newestReviews(storeID);
+                    var reviews = await newestReviews_Guest(storeID);
                     break;
                 case 2:
-                    var reviews = await oldestReviews(storeID);
+                    var reviews = await oldestReviews_Guest(storeID);
                     break;
                 case 3:
-                    var reviews = await mostApprovedReviews(storeID);
+                    var reviews = await mostApprovedReviews_Guest(storeID);
                     break;
                 case 4:
-                    var reviews = await leastApprovedReviews(storeID);
+                    var reviews = await leastApprovedReviews_Guest(storeID);
                     break;
                 default:
                     console.log('Something went wrong');
@@ -837,24 +915,13 @@ const indexFunctions = {
             var editDate = new Date();
 
             await reviewModel.findOneAndUpdate({
-                    reviewID: reviewID
-                }
-                // ,
-                //  {
-                //     content: content,
-                //     storeRating: rating,
-                //     postDate: editDate,
-                //     edited: true,
-
-
-                // }
-                ,
-                [{
-                    $push: {
-                        testing: 'aaaaaaaaaaaaaa'
-                    }
-                }]
-            );
+                reviewID: reviewID
+            }, {
+                content: content,
+                storeRating: rating,
+                postDate: editDate,
+                edited: true,
+            });
 
             var stars = await getUpdatedRating(storeID);
             await storeModel.findOneAndUpdate({
@@ -904,6 +971,88 @@ const indexFunctions = {
                 status: 500
             });
         }
+    },
+    postScoreUp: async function (req, res) {
+        var reviewID = req.params.reviewID;
+        var userID = req.session.logUser.userID;
+
+        var match = await reviewScoreModel.aggregate([{
+            '$match': {
+                'userID': parseInt(userID),
+                'reviewID': parseInt(reviewID)
+            }
+        }]);
+
+        if (match[0] == null) { //create new document if not exist
+            var score = new reviewScore(reviewID, userID, 1);
+            var newScore = new reviewScoreModel(score);
+            console.log(newScore);
+            await newScore.recordScore();
+        } else { // update score if exist
+            await reviewScoreModel.findOneAndUpdate({
+                userID: parseInt(userID),
+                reviewID: parseInt(reviewID)
+            }, {
+                score: 1
+            });
+        }
+
+        var updatedScore = await getScore(reviewID);
+        await reviewModel.findOneAndUpdate({
+            reviewID: reviewID
+        }, {
+            score: updatedScore
+        });
+
+        res.send();
+    },
+    postScoreDown: async function (req, res) {
+        var reviewID = req.params.reviewID;
+        var userID = req.session.logUser.userID;
+
+        var match = await reviewScoreModel.aggregate([{
+            '$match': {
+                'userID': parseInt(userID),
+                'reviewID': parseInt(reviewID)
+            }
+        }]);
+
+        if (match[0] == null) { //create new document if not exist
+            var score = new reviewScore(reviewID, userID, -1);
+            var newScore = new reviewScoreModel(score);
+            console.log(newScore);
+            await newScore.recordScore();
+        } else { // update score if exist
+            await reviewScoreModel.findOneAndUpdate({
+                userID: parseInt(userID),
+                reviewID: parseInt(reviewID)
+            }, {
+                score: -1
+            });
+        }
+
+        var updatedScore = await getScore(reviewID);
+        await reviewModel.findOneAndUpdate({
+            reviewID: reviewID
+        }, {
+            score: updatedScore
+        });
+
+        res.send();
+    },
+
+    postMyComment: async function (req, res) {
+        var {
+            reviewID,
+            comment
+        } = req.body;
+        var commentID = await getMinMaxCommentID(-1, 1);
+        console.log('----------------');
+        console.log('reviewID: ' + reviewID);
+        console.log('comment: ' + comment);
+        console.log('userID: ' + req.session.logUser.userID);
+        console.log('commentID: ' + commentID);
+        console.log('----------------');
     },
 }
 module.exports = indexFunctions;
