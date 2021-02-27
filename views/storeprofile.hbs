@@ -1,31 +1,355 @@
-<!DOCTYPE html>
-<html>
+ <header>
+     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow">
+         <a class="navbar-brand text-success" href="/">ReviewMe!</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+             <span class="navbar-toggler-icon"></span>
+         </button>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Profile</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/all.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             <ul class="navbar-nav mr-auto">
+                 <li>
+                     <form class="form-inline my-2 my-lg-0">
+                         <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
+                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                     </form>
+                 </li>
+             </ul>
+             {{#if guest}}
+             {{> guestUI}}
+             {{else}}
+             {{> userUI}}
+             {{/if}}
+         </div>
+     </nav>
+ </header>
 
-<body>
-    <div class="main-container">
-        <!-- navbar -->
-        {{>login_navbar}}
-        {{>login_storedetails}}
-        
+ <div>
+     <nav>
+         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+             <a class="nav-item nav-link text-success active" id="nav-info-tab" data-toggle="tab" href="#nav-info"
+                 role="tab" aria-controls="nav-info" aria-selected="true">Store Info</a>
+             <a class="nav-item nav-link text-success" id="nav-photo-tab" data-toggle="tab" href="#nav-photo" role="tab"
+                 aria-controls="nav-photo" aria-selected="false">Photos</a>
+             <a class="nav-item nav-link text-success" id="nav-review-tab" data-toggle="tab" href="#nav-review"
+                 role="tab" aria-controls="nav-review" aria-selected="false">Store Reviews</a>
+         </div>
+     </nav>
 
-        <footer class="bg-dark mt-5" style="height: 50px;">
-            <div class="text-white d-flex align-items-center justify-content-center" style="height: 50px;">
-            </div>
-        </footer>
+     <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
 
-    </div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-</body>
+         <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+             <!-- store details -->
+             <div class="container">
 
-</html>
+                 <div>
+                     <div>
+                         <div class="d-flex align-items-end p-0">
+                             <h3 class="text-secondary ml-3 mb-1">{{storeName}}</h3>
+                             <img class="rating ml-3 mb-2" src="/assets/img/ratings/{{stars}}star.png"
+                                 alt="{{stars}} stars">
+                         </div>
+                         <small class="text-secondary ml-3"><a href="/store/{{storeID}}">Go to Store Page</a></small>
+                     </div>
+                     <hr>
+                     <div>
+                         <h5>About Us</h5>
+                         <p>{{description}}</p>
+                     </div>
+                 </div>
+
+                 <div class="d-flex justify-content-end">
+                     <!-- Button trigger modal -->
+                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                         <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
+                             class="fa fa-edit"></span> Edit
+                     </button>
+
+                     <!-- Modal -->
+                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                         <div class="modal-dialog" role="document">
+                             <div class="modal-content">
+                                 <div class="modal-header">
+                                     <h5 class="modal-title" id="exampleModalLabel">Edit Store Information</h5>
+                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                         <span aria-hidden="true">&times;</span>
+                                     </button>
+                                 </div>
+                                 <div class="modal-body">
+
+                                     <div class="form-container">
+                                         <form method="post">
+
+                                             <div class="form-group">
+                                                 <div class="form-group">
+                                                     <label for="storeName">Store Name</label>
+                                                     <input class="form-control" type="text" name="storename" id="storeName" 
+                                                         required="" placeholder="Store Name" value="{{storeName}}">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group">
+                                                 <label for="description">Store Description</label>
+                                                 <textarea class="form-control editorhtml" name="description" id="description" rows="15"
+                                                     placeholder="Store Description" wrap="hard">{{description}}</textarea>
+                                             </div>
+                                         </form>
+                                     </div>
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                     <button onclick="updateStore({{storeID}})" type="button" class="btn btn-success">Save changes</button>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <hr>
+             </div>
+         </div>
+
+         <div class="tab-pane fade" id="nav-photo" role="tabpanel" aria-labelledby="nav-photo-tab">
+             <!-- store photos -->
+
+             <div class="container">
+                 <div class="row p-2">
+
+
+                     <!-- images go here -->
+                     <div class="col-4 p-1">
+                         <div id="0001_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0001" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/300x300">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0002_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0002" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1920x1080">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0003_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0003" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/640x480">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0004_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0004" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/800x600">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0005_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0005" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1024x768">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0006_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0006" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1280x1024">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0009_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0009" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/2560x1440">
+                         </div>
+                     </div>
+
+                     <div class="col-4 p-1">
+                         <div id="0010_O" class="box overlay" onmouseleave="off(this)">
+                             <div class="dropdown d-flex justify-content-end">
+                                 <button class="btn " type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                     aria-haspopup="true" aria-expanded="false">
+                                     <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                         class="text-white fa fa-ellipsis-h "></span>
+                                 </button>
+                                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                                     <a class="dropdown-item" href="#">Delete</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div id="0010" onmouseenter="on(this)" class="card shadow">
+                             <img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/3840x2160">
+                         </div>
+                     </div>
+
+
+                     <!-- no images beyond this point -->
+
+                     <!-- button to add new images -->
+                     <div class="col-4 p-1 d-flex">
+                         <!-- Button trigger modal -->
+                         <button type="button" class="btn btn-light shadow flex-fill" data-toggle="modal"
+                             data-target="#addphoto">
+                             <span onmouseover="   " onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                 class="fa fa-plus"></span>
+                         </button>
+
+                         <!-- Modal -->
+                         <div class="modal fade" id="addphoto" tabindex="-1" role="dialog"
+                             aria-labelledby="addphotoLabel" aria-hidden="true">
+                             <div class="modal-dialog" role="document">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title" id="addphotoLabel">Add Photo</h5>
+                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                             <span aria-hidden="true">&times;</span>
+                                         </button>
+                                     </div>
+                                     <div class="modal-body">
+                                         <div class="form-container">
+                                             <form method="post">
+                                                 <div class="form-row">
+                                                     <div class="col">
+                                                         <div class="form-group">
+                                                             <input type="file" accept=".jpg, .jpeg, .png"
+                                                                 class="form-control-file" id="storelogo">
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </form>
+                                         </div>
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-secondary"
+                                             data-dismiss="modal">Close</button>
+                                         <button type="button" class="btn btn-success">Add</button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+         </div>
+
+         <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
+             <!-- reviews -->
+             <div class="container">
+                 <div class="dropdown d-flex justify-content-end">
+                     <button class="btn btn-outline-success" type="button" id="dropdownMenuButton"
+                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <div class="font-weight-bold">
+                             <span onmouseover="" onclick="" id="" style="font-size:20px;cursor:pointer;"
+                                 class="fa fa-sort-amount-down "></span>
+                             SORT BY
+                         </div>
+                     </button>
+                     <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdown">
+                         <button class="dropdown-item" onclick="newest()">Newest</button>
+                         <button class="dropdown-item" onclick="oldest()">Oldest</button>
+                         <button class="dropdown-item" onclick="mostApproved()">Most Approved</button>
+                         <!-- most amount of points -->
+                         <button class="dropdown-item" onclick="leastApproved()">Least Approved</button>
+                         <!-- least amount of points -->
+                     </div>
+                 </div>
+
+                 <div>
+
+                     {{#each reviews}}
+                     {{>store_reviewUser this}}
+                     {{/each}}
+
+                 </div>
+             </div>
+         </div>
+     </div>
+
+ </div>

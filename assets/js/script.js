@@ -1,3 +1,15 @@
+function updateStore(storeID){
+    var storeName = $('#storeName').val();
+    var description = $('#description').val();
+    if(validator.isEmpty(storeName)||validator.isEmpty(description)){
+        alert('Please make sure all fields are not empty');
+    }else{
+        console.log(storeID);
+        console.log(storeName);
+        console.log(description);
+    }
+}
+
 function submitComment(reviewID) {
     var content = $('#reply' + reviewID + '_Content').val();
     if (validator.isEmpty(content)) {
@@ -121,6 +133,14 @@ function editReview(reviewID, storeID) {
         }
     }
 }
+
+function on(item) {
+    document.getElementById(item.id + "_O").style.display = "block";
+}
+
+function off(item) {
+    document.getElementById(item.id).style.display = "none";
+}
 (function ($) {
 
     $(function () {
@@ -157,6 +177,7 @@ function editReview(reviewID, storeID) {
         $('form').on('submit', function (e) {
             e.preventDefault();
         });
+        
         // FEATURES
         $('#login_submit').on('click', function () {
             var email = $('#login_email').val();

@@ -541,15 +541,15 @@ const indexFunctions = {
     },
     getProfile: async function (req, res) {
         try {
-
             var userID = req.params.userID;
-
-
             var accOwner = false;
             if (userID == req.session.logUser.userID)
                 accOwner = true;
 
             var user = await userModel.findOne({
+                userID: userID
+            });
+            var store = await storeModel.findOne({
                 userID: userID
             });
             var matches = await reviewsModel.aggregate([{
@@ -561,7 +561,11 @@ const indexFunctions = {
                 }
             }, {
                 '$match': {
-                    'userID': parseInt(userID)
+                    '$and': [{
+                        'userID': parseInt(userID)
+                    }, {
+                        'deleted': false
+                    }]
                 }
             }, {
                 '$unwind': {
@@ -587,6 +591,7 @@ const indexFunctions = {
                 storeOwner: user.isStoreOwner,
                 bio: user.bio,
                 accOwner: accOwner,
+                storeID: store.storeID,
                 reviews: JSON.parse(JSON.stringify(matches))
             });
         } catch (e) {
@@ -603,7 +608,11 @@ const indexFunctions = {
                 }
             }, {
                 '$match': {
-                    'userID': parseInt(userID)
+                    '$and': [{
+                        'userID': parseInt(userID)
+                    }, {
+                        'deleted': false
+                    }]
                 }
             }, {
                 '$unwind': {
@@ -705,6 +714,7 @@ const indexFunctions = {
                 storeName: store.storeName,
                 stars: store.stars,
                 storeID: storeID,
+                ownerID: store.userID,
                 description: store.description,
                 reviewed: reviewed,
                 reviews: reviews,
@@ -736,7 +746,57 @@ const indexFunctions = {
                 storeName: store.storeName,
                 stars: store.stars,
                 description: store.description,
+                ownerID: store.userID,
                 reviews: reviews,
+            });
+        }
+
+    },
+    getStoreProfile: async function (req, res) {
+        try {
+            try { //initialize settings if not found
+                console.log(req.session.userSettings.sortReview);
+            } catch {
+                console.log('Required settings not found. Initializing settings.');
+                req.session.userSettings = {
+                    sortReview: 1
+                }
+            }
+            var storeID = req.params.storeID;
+            var store = await storeModel.findOne({
+                storeID: storeID
+            });
+            switch (req.session.userSettings.sortReview) {
+                case 1:
+                    var reviews = await newestReviews_User(storeID, req.session.logUser.userID);
+                    break;
+                case 2:
+                    var reviews = await oldestReviews_User(storeID, req.session.logUser.userID);
+                    break;
+                case 3:
+                    var reviews = await mostApprovedReviews_User(storeID, req.session.logUser.userID);
+                    break;
+                case 4:
+                    var reviews = await leastApprovedReviews_User(storeID, req.session.logUser.userID);
+                    break;
+                default:
+                    console.log('Something went wrong');
+                    break;
+            }
+            res.render('storeprofile', {
+                name: req.session.logUser.username,
+                ID: req.session.logUser.userID,
+                title: store.storeName,
+                storeID: store.storeID,
+                storeName: store.storeName,
+                stars: store.stars,
+                description: store.description,
+
+                reviews: reviews,
+            });
+        } catch {
+            res.render('login', {
+                title: 'Login'
             });
         }
 
