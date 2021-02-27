@@ -1124,12 +1124,6 @@ const indexFunctions = {
             desc
         } = req.body;
 
-        console.log('----------------');
-        console.log('storeID: ' + storeID);
-        console.log('storeName: ' + storeName);
-        console.log('description: ' + desc);
-        console.log('----------------');
-
         await storeModel.findOneAndUpdate({
             storeID: storeID
         }, {
