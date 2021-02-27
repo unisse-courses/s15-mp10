@@ -1,12 +1,17 @@
-function updateStore(storeID){
+function updateStore(storeID) {
     var storeName = $('#storeName').val();
     var description = $('#description').val();
-    if(validator.isEmpty(storeName)||validator.isEmpty(description)){
+    if (validator.isEmpty(storeName) || validator.isEmpty(description)) {
         alert('Please make sure all fields are not empty');
-    }else{
-        console.log(storeID);
-        console.log(storeName);
-        console.log(description);
+    } else {
+        $.post('/storeProf_Edit', {
+            storeID: storeID,
+            storeName: storeName,
+            desc: description
+        }, function () {
+            location.reload()
+        });
+
     }
 }
 
@@ -177,7 +182,7 @@ function off(item) {
         $('form').on('submit', function (e) {
             e.preventDefault();
         });
-        
+
         // FEATURES
         $('#login_submit').on('click', function () {
             var email = $('#login_email').val();

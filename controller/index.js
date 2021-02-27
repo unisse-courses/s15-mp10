@@ -51,9 +51,10 @@ function reviewScore(reviewID, userID, score) {
     this.score = parseInt(score);
 }
 
-function Comment(commentID, userID, reviewID, content) {
+function Comment(commentID, userID, author, reviewID, content) {
     this.commentID = commentID;
     this.userID = userID;
+    this.author = author;
     this.reviewID = reviewID;
     this.content = content;
 }
@@ -847,7 +848,7 @@ const indexFunctions = {
 
     postLogout: function (req, res) {
         req.session.destroy();
-        res.redirect("/");
+        res.redirect("back");
     },
 
     postUserSignup: async function (req, res) {
@@ -1107,17 +1108,34 @@ const indexFunctions = {
             content
         } = req.body;
         var commentID = await getMinMaxCommentID(-1, 1);
-        console.log('----------------');
-        console.log('reviewID: ' + reviewID);
-        console.log('comment: ' + content);
-        console.log('userID: ' + req.session.logUser.userID);
-        console.log('commentID: ' + commentID);
-        console.log('----------------');
 
-        var comment = new Comment(commentID, req.session.logUser.userID, reviewID, content);
+        var comment = new Comment(commentID, req.session.logUser.userID, req.session.logUser.username, reviewID, content);
         var newComment = new commentModel(comment);
         console.log(newComment);
         await newComment.recordComment();
+
+        res.send();
+    },
+
+    postStoreEdit: async function (req, res) {
+        var {
+            storeID,
+            storeName,
+            desc
+        } = req.body;
+
+        console.log('----------------');
+        console.log('storeID: ' + storeID);
+        console.log('storeName: ' + storeName);
+        console.log('description: ' + desc);
+        console.log('----------------');
+
+        await storeModel.findOneAndUpdate({
+            storeID: storeID
+        }, {
+            storeName: storeName,
+            description: desc
+        });
 
         res.send();
     },

@@ -22,6 +22,10 @@ const commentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    author: {
+        type: String,
+        required: true
+    },
     reviewID:{
         type: Number,
         required: true
