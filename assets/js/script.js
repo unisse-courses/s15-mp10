@@ -1,20 +1,25 @@
-function submitComment(reviewID){
-    var comment = $('#reply'+reviewID+'_Content').val();
-     if(validator.isEmpty(comment)){
+function submitComment(reviewID) {
+    var content = $('#reply' + reviewID + '_Content').val();
+    if (validator.isEmpty(content)) {
         alert('Please provide a comment');
-     }else{
-        $.post('/submitComment', {reviewID:reviewID, comment:comment}, function(){});
-     }
+    } else {
+        $.post('/submitComment', {
+            reviewID: reviewID,
+            content: content
+        }, function () {
+            location.reload();
+        });
+    }
 }
 
 function scoreUp(reviewID) {
-    $.post('/scoreUp/'+ reviewID, function () {
+    $.post('/scoreUp/' + reviewID, function () {
         location.reload();
     });
 }
 
 function scoreDown(reviewID) {
-    $.post('/scoreDown/'+ reviewID, function () {
+    $.post('/scoreDown/' + reviewID, function () {
         location.reload();
     });
 }

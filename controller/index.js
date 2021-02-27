@@ -1044,15 +1044,22 @@ const indexFunctions = {
     postMyComment: async function (req, res) {
         var {
             reviewID,
-            comment
+            content
         } = req.body;
         var commentID = await getMinMaxCommentID(-1, 1);
         console.log('----------------');
         console.log('reviewID: ' + reviewID);
-        console.log('comment: ' + comment);
+        console.log('comment: ' + content);
         console.log('userID: ' + req.session.logUser.userID);
         console.log('commentID: ' + commentID);
         console.log('----------------');
+
+        var comment = new Comment(commentID, req.session.logUser.userID, reviewID, content);
+        var newComment = new commentModel(comment);
+        console.log(newComment);
+        await newComment.recordComment();
+
+        res.send();
     },
 }
 module.exports = indexFunctions;
