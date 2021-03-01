@@ -9,8 +9,10 @@
             <ul class="navbar-nav mr-auto">
                 <li>
                     <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search Stores">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <input id="header_searchInput" class="form-control mr-sm-2" type="search"
+                            placeholder="Search Stores">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                            onclick="headerSearch()">Search</button>
                     </form>
                 </li>
             </ul>
@@ -26,21 +28,14 @@
 <!-- store photos -->
 <div class="thumbnail-container jumbotron shadow">
     <ul class="thumbnail-list">
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/300x300"></span></li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1920x1080"></span>
-        </li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/640x480"></span></li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/800x600"></span></li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1024x768"></span></li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1280x1024"></span>
-        </li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1280x720"></span></li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/1920x1200"></span>
-        </li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/2560x1440"></span>
-        </li>
-        <li><span><img class="thumbnail-image" src="https://source.unsplash.com/collection/190727/3840x2160"></span>
-        </li>
+
+        {{#each images}}
+        {{#each this}}
+        {{#if imageBase64}}
+        <li><span><img class="thumbnail-image" src='data:{{contentType}};base64,{{imageBase64}}'></span></li>
+        {{/if}}
+        {{/each}}
+        {{/each}}
     </ul>
 </div>
 <!-- store details -->

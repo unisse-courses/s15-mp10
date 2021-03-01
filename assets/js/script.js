@@ -1,6 +1,16 @@
+function headerSearch() {
+    var search = $('#header_searchInput').val();
+    console.log(search);
+}
+
+function jumboSearch() {
+    var search = $('#jumbo_searchInput').val();
+    console.log(search);
+}
+
 function deleteImg(imageID) {
     $.post('/delete', {
-        imageID:imageID
+        imageID: imageID
     }, function () {
         location.reload();
     });
@@ -189,7 +199,7 @@ function off(item) {
 
         $('form').on('submit', function (e) {
             if ($(this).hasClass('exclude')) {
-                
+
             } else {
                 e.preventDefault();
             }

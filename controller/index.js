@@ -529,8 +529,18 @@ const indexFunctions = {
         /**DEBUG */
         // console.log('homepage: ');
         // console.log(req.session);
+        try{
+            var matches = await storeModel.find({storeName: {$regex:req.session.userSettings.search, $options:'i'}});
+        }catch{
+            var matches = await storeModel.find();
+        }
+        // if(req.session.userSettings.search == undefined){
+        //     console.log(req.session.userSettings.search);
+        // }else{
+        //     var matches = await storeModel.find({});
+        // }
 
-        var matches = await storeModel.find({});
+        
         if (req.session.type) { //check if user is logged in
             res.render('homepage', {
                 title: 'ReviewMe',
@@ -677,6 +687,9 @@ const indexFunctions = {
             storeID: storeID
         });
 
+        var images = await storeImageModel.find({
+            storeID: storeID
+        });
         if (req.session.type) { // check if user is logged in
             switch (req.session.userSettings.sortReview) {
                 case 1:
@@ -739,6 +752,7 @@ const indexFunctions = {
                 storeID: storeID,
                 ownerID: store.userID,
                 description: store.description,
+                images: images,
                 reviewed: reviewed,
                 reviews: reviews,
                 myReview: myReview[0],
@@ -770,6 +784,7 @@ const indexFunctions = {
                 stars: store.stars,
                 description: store.description,
                 ownerID: store.userID,
+                images: images,
                 reviews: reviews,
             });
         }
@@ -1194,7 +1209,6 @@ const indexFunctions = {
                 contentType: files[index].mimetype,
                 imageBase64: src
             }
-            console.log(finalImg.imageID);
             let newUpload = new storeImageModel(finalImg);
 
             return newUpload
@@ -1221,7 +1235,6 @@ const indexFunctions = {
         Promise.all(result)
             .then(msg => {
                 // res.json(msg);
-                console.log('reload page');
                 res.redirect('/profile/store/' + storeID);
             })
             .catch(err => {
