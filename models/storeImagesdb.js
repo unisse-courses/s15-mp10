@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@ccapdev.eadlr.mongodb.net/ReviewMe?retryWrites=true&w=majority`, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
     })
     .then(() => {
             console.log('storeImagesdb: OK');
@@ -21,9 +23,17 @@ const storeImageSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    img: {
-        data: Buffer,
-        contentType: String
+    filename: {
+        type: String,
+        required: true
+    },
+    contentType: {
+        type: String,
+        required: true
+    },
+    imageBase64: {
+        type: String,
+        required: true
     }
 }, {
     collection: "StoreImages"

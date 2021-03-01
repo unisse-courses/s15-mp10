@@ -2,6 +2,7 @@ const express = require('express');
 const router = express();
 const controller = require('../controller/index');
 const indexMiddleware = require('../middlewares/indexMiddleware');
+const store = require('../middlewares/multer');
 // GETS
 router.get('/', controller.getHomepage);
 router.get('/login', controller.getLogin);
@@ -26,6 +27,9 @@ router.post('/scoreUp/:reviewID',indexMiddleware.validateScoreUp, controller.pos
 router.post('/scoreDown/:reviewID',indexMiddleware.validateScoreDown, controller.postScoreDown);
 
 router.post('/submitComment', controller.postMyComment);
+
+router.post('/upload/:storeID', store.array('images', 1) , controller.postImage);
+router.post('/delete', controller.postDeleteImage);
 
 /*
     USER SETTINGS

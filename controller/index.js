@@ -13,7 +13,8 @@ const {
     isRegExp
 } = require('util');
 const {
-    findOneAndUpdate
+    findOneAndUpdate,
+    findOneAndDelete
 } = require('../models/usersdb');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
@@ -398,6 +399,27 @@ async function getMinMaxReviewID(sortby, offset) {
     }
 }
 
+async function getMinMaxImageID(sortby, offset) {
+    try {
+        //sortby - min = 1, max = -1
+        //offset - adds userad by offset
+        var ID = await storeImageModel.aggregate([{
+            '$sort': {
+                'imageID': sortby
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$project': {
+                'imageID': 1
+            }
+        }]);
+        return ID[0].imageID + offset;
+    } catch {
+        return 5000;
+    }
+}
+
 async function getMinMaxCommentID(sortby, offset) {
     try {
         //sortby - min = 1, max = -1
@@ -755,47 +777,58 @@ const indexFunctions = {
     },
     getStoreProfile: async function (req, res) {
         try {
-            try { //initialize settings if not found
-                console.log(req.session.userSettings.sortReview);
-            } catch {
-                console.log('Required settings not found. Initializing settings.');
-                req.session.userSettings = {
-                    sortReview: 1
-                }
-            }
             var storeID = req.params.storeID;
             var store = await storeModel.findOne({
                 storeID: storeID
             });
-            switch (req.session.userSettings.sortReview) {
-                case 1:
-                    var reviews = await newestReviews_User(storeID, req.session.logUser.userID);
-                    break;
-                case 2:
-                    var reviews = await oldestReviews_User(storeID, req.session.logUser.userID);
-                    break;
-                case 3:
-                    var reviews = await mostApprovedReviews_User(storeID, req.session.logUser.userID);
-                    break;
-                case 4:
-                    var reviews = await leastApprovedReviews_User(storeID, req.session.logUser.userID);
-                    break;
-                default:
-                    console.log('Something went wrong');
-                    break;
-            }
-            res.render('storeprofile', {
-                name: req.session.logUser.username,
-                ID: req.session.logUser.userID,
-                title: store.storeName,
-                storeID: store.storeID,
-                storeName: store.storeName,
-                stars: store.stars,
-                description: store.description,
 
-                reviews: reviews,
-            });
-        } catch {
+            if (store.userID == req.session.logUser.userID) {
+                try { //initialize settings if not found
+                    console.log(req.session.userSettings.sortReview);
+                } catch {
+                    console.log('Required settings not found. Initializing settings.');
+                    req.session.userSettings = {
+                        sortReview: 1
+                    }
+                }
+
+                switch (req.session.userSettings.sortReview) {
+                    case 1:
+                        var reviews = await newestReviews_User(storeID, req.session.logUser.userID);
+                        break;
+                    case 2:
+                        var reviews = await oldestReviews_User(storeID, req.session.logUser.userID);
+                        break;
+                    case 3:
+                        var reviews = await mostApprovedReviews_User(storeID, req.session.logUser.userID);
+                        break;
+                    case 4:
+                        var reviews = await leastApprovedReviews_User(storeID, req.session.logUser.userID);
+                        break;
+                    default:
+                        console.log('Something went wrong');
+                        break;
+                }
+
+                var images = await storeImageModel.find({
+                    storeID: storeID
+                });
+                res.render('storeprofile', {
+                    name: req.session.logUser.username,
+                    ID: req.session.logUser.userID,
+                    title: store.storeName,
+                    storeID: store.storeID,
+                    storeName: store.storeName,
+                    stars: store.stars,
+                    description: store.description,
+                    images: images,
+                    reviews: reviews,
+                });
+            } else {
+                res.redirect('/');
+            }
+        } catch (e) {
+            console.log(e);
             res.render('login', {
                 title: 'Login'
             });
@@ -1133,5 +1166,81 @@ const indexFunctions = {
 
         res.send();
     },
+
+    postImage: async function (req, res, next) {
+        const files = req.files;
+        var storeID = req.params.storeID;
+        var imageID = await getMinMaxImageID(-1, 1);
+        if (!files) {
+            const error = new Error('Please choose files');
+            error.httpStatusCode = 400;
+            return next(error)
+        }
+
+        // convert images into base64 encoding
+        let imgArray = files.map((file) => {
+            let img = fs.readFileSync(file.path)
+
+            return encode_image = img.toString('base64')
+        })
+
+        let result = imgArray.map((src, index) => {
+
+            // create object to store data in the collection
+            let finalImg = {
+                imageID: parseInt(imageID),
+                storeID: parseInt(storeID),
+                filename: files[index].originalname,
+                contentType: files[index].mimetype,
+                imageBase64: src
+            }
+            console.log(finalImg.imageID);
+            let newUpload = new storeImageModel(finalImg);
+
+            return newUpload
+                .save()
+                .then(() => {
+                    return {
+                        msg: `${files[index].originalname} Uploaded Successfully...!`
+                    }
+                })
+                .catch(error => {
+                    if (error) {
+                        if (error.name === 'MongoError' && error.code === 11000) {
+                            return Promise.reject({
+                                error: `Duplicate ${files[index].originalname}. File Already exists! `
+                            });
+                        }
+                        return Promise.reject({
+                            error: error.message || `Cannot Upload ${files[index].originalname} Something Missing!`
+                        })
+                    }
+                })
+        });
+
+        Promise.all(result)
+            .then(msg => {
+                // res.json(msg);
+                console.log('reload page');
+                res.redirect('/profile/store/' + storeID);
+            })
+            .catch(err => {
+                console.log('error');
+                console.log(err);
+                res.redirect('/');
+            })
+    },
+
+    postDeleteImage: async function (req, res) {
+        var {
+            imageID
+        } = req.body;
+
+        await storeImageModel.findOneAndDelete({
+            imageID: imageID
+        });
+        res.send();
+    },
+
 }
 module.exports = indexFunctions;

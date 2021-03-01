@@ -1,3 +1,11 @@
+function deleteImg(imageID) {
+    $.post('/delete', {
+        imageID:imageID
+    }, function () {
+        location.reload();
+    });
+}
+
 function updateStore(storeID) {
     var storeName = $('#storeName').val();
     var description = $('#description').val();
@@ -180,7 +188,12 @@ function off(item) {
         });
 
         $('form').on('submit', function (e) {
-            e.preventDefault();
+            if ($(this).hasClass('exclude')) {
+                
+            } else {
+                e.preventDefault();
+            }
+
         });
 
         // FEATURES
