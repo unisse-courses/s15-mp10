@@ -16,6 +16,9 @@ const {
     findOneAndUpdate,
     findOneAndDelete
 } = require('../models/usersdb');
+const {
+    search
+} = require('../router/indexRouter');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -524,23 +527,64 @@ const indexFunctions = {
         req.session.userSettings.sortReview = parseInt(req.params.option);
         res.send();
     },
+    postUserSettings_searchStore: function (req, res) {
+        var {
+            clear
+        } = req.body;
+        if (clear == 'true') {
+            req.session.userSettings.search = '';
+        } else {
+            req.session.userSettings.search = req.params.search;
+        }
+        res.send();
+    },
+    postUserSettings_filterStore: function (req, res) {
+        var {
+            filter
+        } = req.body;
+        req.session.userSettings.filter = filter;
+        req.session.userSettings.filterStore = parseInt(req.params.filter);
+        res.send();
+    },
 
     getHomepage: async function (req, res) {
         /**DEBUG */
         // console.log('homepage: ');
         // console.log(req.session);
-        try{
-            var matches = await storeModel.find({storeName: {$regex:req.session.userSettings.search, $options:'i'}});
-        }catch{
-            var matches = await storeModel.find();
+        try { //initialize settings if not found
+            console.log(req.session.userSettings.search);
+            console.log(req.session.userSettings.filter);
+            console.log(req.session.userSettings.filterStore);
+        } catch {
+            console.log('Required settings not found. Initializing settings.');
+            req.session.userSettings = {
+                sortReview: 1,
+                search: '',
+                filter: false,
+                filterStore: 0
+            }
         }
-        // if(req.session.userSettings.search == undefined){
-        //     console.log(req.session.userSettings.search);
-        // }else{
-        //     var matches = await storeModel.find({});
-        // }
+        if (req.session.userSettings.filter == 'true') {
+            var matches = await storeModel.find({
+                $and: [{
+                    storeName: {
+                        $regex: req.session.userSettings.search,
+                        $options: 'i'
+                    }
+                }, {
+                    stars: parseInt(req.session.userSettings.filterStore)
+                }]
+            });
+        } else {
+            var matches = await storeModel.find({
+                storeName: {
+                    $regex: req.session.userSettings.search,
+                    $options: 'i'
+                }
+            });
+        }
 
-        
+
         if (req.session.type) { //check if user is logged in
             res.render('homepage', {
                 title: 'ReviewMe',
@@ -548,12 +592,14 @@ const indexFunctions = {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
                 stores: JSON.parse(JSON.stringify(matches)),
+                searchStore: req.session.userSettings.search,
             });
         } else {
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: true,
                 stores: JSON.parse(JSON.stringify(matches)),
+                searchStore: req.session.userSettings.search,
             });
         }
     },
@@ -618,6 +664,7 @@ const indexFunctions = {
             res.render('userProf', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
+                searchStore: req.session.userSettings.search,
                 title: user.username,
                 user: user.username,
                 userID: user.userID,
@@ -664,6 +711,7 @@ const indexFunctions = {
             }]);
             res.render('userProf', {
                 guest: true,
+                searchStore: req.session.userSettings.search,
                 title: user.username,
                 user: user.username,
                 userID: user.userID,
@@ -679,7 +727,10 @@ const indexFunctions = {
         } catch {
             console.log('Required settings not found. Initializing settings.');
             req.session.userSettings = {
-                sortReview: 1
+                sortReview: 1,
+                search: '',
+                filter: false,
+                filterStore: 0
             }
         }
         var storeID = req.params.storeID;
@@ -742,6 +793,7 @@ const indexFunctions = {
             res.render('store', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
+                searchStore: req.session.userSettings.search,
                 title: store.storeName,
                 guest: false,
                 user: req.session.logUser.username,
@@ -786,6 +838,7 @@ const indexFunctions = {
                 ownerID: store.userID,
                 images: images,
                 reviews: reviews,
+                searchStore: req.session.userSettings.search,
             });
         }
 
@@ -803,7 +856,10 @@ const indexFunctions = {
                 } catch {
                     console.log('Required settings not found. Initializing settings.');
                     req.session.userSettings = {
-                        sortReview: 1
+                        sortReview: 1,
+                        search: '',
+                        filter: false,
+                        filterStore: 0
                     }
                 }
 
@@ -838,6 +894,7 @@ const indexFunctions = {
                     description: store.description,
                     images: images,
                     reviews: reviews,
+                    searchStore: req.session.userSettings.search,
                 });
             } else {
                 res.redirect('/');

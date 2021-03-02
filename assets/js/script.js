@@ -1,11 +1,84 @@
+function filterAll() {
+    $.post('/userSettings/filter/0', {
+        filter: false
+    }, function () {
+        location.reload();
+    });
+}
+
+function filter5star() {
+    $.post('/userSettings/filter/5', {
+        filter: true
+    }, function () {
+        location.reload();
+    });
+}
+
+function filter4star() {
+    $.post('/userSettings/filter/4', {
+        filter: true
+    }, function () {
+        location.reload();
+    });
+}
+
+function filter3star() {
+    $.post('/userSettings/filter/3', {
+        filter: true
+    }, function () {
+        location.reload();
+    });
+}
+
+function filter2star() {
+    $.post('/userSettings/filter/2', {
+        filter: true
+    }, function () {
+        location.reload();
+    });
+}
+
+function filter1star() {
+    $.post('/userSettings/filter/1', {
+        filter: true
+    }, function () {
+        location.reload();
+    });
+}
+
 function headerSearch() {
     var search = $('#header_searchInput').val();
-    console.log(search);
+    if (validator.isEmpty(search)) {
+        console.log('empty');
+        $.post('/userSettings/search/true',{clear: true}, function () {
+            window.location = '/';
+        });   
+    }else{
+        $.post('/userSettings/search/' + search, function () {
+            window.location = '/';
+        });
+    }
 }
 
 function jumboSearch() {
     var search = $('#jumbo_searchInput').val();
-    console.log(search);
+    if (validator.isEmpty(search)) {
+        console.log('empty');
+        $.post('/userSettings/search/true',{clear: true}, function () {
+            window.location = '/';
+        });   
+    }else{
+        $.post('/userSettings/search/' + search, function () {
+            window.location = '/';
+        });
+    }
+
+}
+
+function removeSettings() {
+    $.post('/userSettings/search/true',{clear:true}, function () {
+        $.post('/userSettings/filter/0', function () {});
+    });
 }
 
 function deleteImg(imageID) {

@@ -35,4 +35,7 @@ router.post('/delete', controller.postDeleteImage);
     USER SETTINGS
 */
 router.post('/userSettings/sortReview/:option', controller.postUserSettings_sortReview);
+router.post('/userSettings/search/:search', controller.postUserSettings_searchStore);
+router.post('/userSettings/filter/:filter', controller.postUserSettings_filterStore);
+
 module.exports = router;

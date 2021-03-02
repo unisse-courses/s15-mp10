@@ -48,7 +48,7 @@
     <form>
         <div class="input-group">
             <input id="jumbo_searchInput" class="jumbo form-control mr-sm-2 shadow-sm" type="search"
-                placeholder="Search Stores">
+                placeholder="Search Stores" value="{{searchStore}}">
             <button id="jumbo_searchSubmit" class="jumbo btn btn-success my-2 my-sm-0 shadow-lg"
                 type="submit" onclick="jumboSearch()">Search</button>
         </div>
@@ -62,11 +62,12 @@
         Filter Rating
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <button id="filter_5star" class="dropdown-item btn btn-outline-success">5 star</button>
-        <button id="filter_4star" class="dropdown-item btn btn-outline-success">4 star</button>
-        <button id="filter_3star" class="dropdown-item btn btn-outline-success">3 star</button>
-        <button id="filter_2star" class="dropdown-item btn btn-outline-success">2 star</button>
-        <button id="filter_1star" class="dropdown-item btn btn-outline-success">1 star</button>
+        <button onclick="filterAll()" id="filter_5star" class="dropdown-item btn btn-outline-success">Show All</button>
+        <button onclick="filter5star()" id="filter_5star" class="dropdown-item btn btn-outline-success">5 star</button>
+        <button onclick="filter4star()" id="filter_4star" class="dropdown-item btn btn-outline-success">4 star</button>
+        <button onclick="filter3star()" id="filter_3star" class="dropdown-item btn btn-outline-success">3 star</button>
+        <button onclick="filter2star()" id="filter_2star" class="dropdown-item btn btn-outline-success">2 star</button>
+        <button onclick="filter1star()" id="filter_1star" class="dropdown-item btn btn-outline-success">1 star</button>
     </div>
 </div>
 
