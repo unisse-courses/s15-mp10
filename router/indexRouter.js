@@ -11,6 +11,7 @@ router.get('/storeSignup', controller.getStoreSignup)
 router.get('/store/:storeID', controller.getStore);
 router.get('/profile/user/:userID', controller.getProfile);
 router.get('/profile/store/:storeID', controller.getStoreProfile);
+router.get('/profile/bookmarks/:userID', controller.getBookmarks);
 // POSTS
 router.post('/login', controller.postLogin);
 router.post('/logout', controller.postLogout);
@@ -30,6 +31,9 @@ router.post('/submitComment', controller.postMyComment);
 
 router.post('/upload/:storeID', store.array('images', 1) , controller.postImage);
 router.post('/delete', controller.postDeleteImage);
+
+router.post('/addBookmark', controller.postAddBookmark);
+router.post('/deleteBookmark', controller.postDeleteBookmark);
 
 /*
     USER SETTINGS

@@ -6,7 +6,7 @@ const storeModel = require('../models/storesdb');
 const reviewModel = require('../models/reviewsdb');
 const commentModel = require('../models/commentsdb');
 const storeImageModel = require('../models/storeImagesdb');
-const sentImageModel = require('../models/sentImagesdb');
+const bookmarkModel = require('../models/bookmarksdb');
 const reviewsModel = require('../models/reviewsdb');
 const reviewScoreModel = require('../models/reviewScoresdb');
 const {
@@ -19,6 +19,7 @@ const {
 const {
     search
 } = require('../router/indexRouter');
+const bookmarksModel = require('../models/bookmarksdb');
 
 function User(userID, email, username, password, bio, isStoreOwner) {
     this.userID = userID;
@@ -61,6 +62,11 @@ function Comment(commentID, userID, author, reviewID, content) {
     this.author = author;
     this.reviewID = reviewID;
     this.content = content;
+}
+
+function Bookmark(storeID, userID) {
+    this.storeID = storeID;
+    this.userID = userID;
 }
 
 async function getScore(reviewID) {
@@ -586,11 +592,16 @@ const indexFunctions = {
 
 
         if (req.session.type) { //check if user is logged in
+            var myStore = await storeModel.findOne({
+                userID: req.session.logUser.userID
+            });
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: false,
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
+                storeOwner: req.session.logUser.isStoreOwner,
+                myStoreID:myStore.storeID,
                 stores: JSON.parse(JSON.stringify(matches)),
                 searchStore: req.session.userSettings.search,
             });
@@ -661,6 +672,11 @@ const indexFunctions = {
                     'storeName': '$Store.storeName',
                 }
             }]);
+
+            var myStore = await storeModel.findOne({
+                userID: req.session.logUser.userID
+            });
+
             res.render('userProf', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
@@ -672,6 +688,7 @@ const indexFunctions = {
                 bio: user.bio,
                 accOwner: accOwner,
                 storeID: store.storeID,
+                myStoreID: myStore.storeID,
                 reviews: JSON.parse(JSON.stringify(matches))
             });
         } catch (e) {
@@ -718,6 +735,71 @@ const indexFunctions = {
                 storeOwner: user.isStoreOwner,
                 bio: user.bio,
                 reviews: JSON.parse(JSON.stringify(matches))
+            });
+        }
+    },
+    getBookmarks: async function (req, res) {
+        try {
+            var userID = req.params.userID;
+            var accOwner = false;
+            if (userID == req.session.logUser.userID)
+                accOwner = true;
+
+            var user = await userModel.findOne({
+                userID: userID
+            });
+            var store = await storeModel.findOne({
+                userID: userID
+            });
+            var matches = await bookmarksModel.aggregate([
+                {
+                  '$match': {
+                    'userID': parseInt(userID)
+                  }
+                }, {
+                  '$lookup': {
+                    'from': 'Stores', 
+                    'localField': 'storeID', 
+                    'foreignField': 'storeID', 
+                    'as': 'strDta'
+                  }
+                }, {
+                  '$unwind': {
+                    'path': '$strDta', 
+                    'preserveNullAndEmptyArrays': true
+                  }
+                }, {
+                  '$project': {
+                    'storeID': 1, 
+                    'storeName': '$strDta.storeName', 
+                    'description': '$strDta.description', 
+                    'stars': '$strDta.stars'
+                  }
+                }
+              ]);
+
+              var myStore = await storeModel.findOne({
+                userID: req.session.logUser.userID
+            });
+
+            res.render('userBookmark', {
+                name: req.session.logUser.username,
+                ID: req.session.logUser.userID,
+                searchStore: req.session.userSettings.search,
+                title: user.username,
+                user: user.username,
+                userID: user.userID,
+                storeOwner: user.isStoreOwner,
+                bio: user.bio,
+                accOwner: accOwner,
+                storeID: store.storeID,
+                myStoreID: myStore.storeID,
+                bookmarks: JSON.parse(JSON.stringify(matches))
+            });
+        } catch (e) {
+            console.log(e);
+            res.render('login', {
+                title: 'Login'
             });
         }
     },
@@ -790,9 +872,13 @@ const indexFunctions = {
                 reviewed = true;
 
             var owner = await isOwner(storeID, req.session.logUser.userID);
+            var myStore = await storeModel.findOne({
+                userID: req.session.logUser.userID
+            });
             res.render('store', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
+                myStoreID:myStore.storeID,
                 searchStore: req.session.userSettings.search,
                 title: store.storeName,
                 guest: false,
@@ -884,9 +970,15 @@ const indexFunctions = {
                 var images = await storeImageModel.find({
                     storeID: storeID
                 });
+
+                var myStore = await storeModel.findOne({
+                    userID: req.session.logUser.userID
+                });
                 res.render('storeprofile', {
                     name: req.session.logUser.username,
                     ID: req.session.logUser.userID,
+                    storeOwner: req.session.logUser.isStoreOwner,
+                    myStoreID:myStore.storeID,
                     title: store.storeName,
                     storeID: store.storeID,
                     storeName: store.storeName,
@@ -1310,6 +1402,55 @@ const indexFunctions = {
             imageID: imageID
         });
         res.send();
+    },
+
+    postAddBookmark: async function (req, res) {
+        var {
+            storeID
+        } = req.body;
+        var userID = req.session.logUser.userID;
+        var result = await bookmarksModel.findOne({
+            storeID: storeID,
+            userID: userID
+        });
+        if (result) {
+            res.send({
+                status: 200,
+                msg: 'Bookmark already added'
+            });
+        } else {
+
+            var bookmark = new Bookmark(storeID, parseInt(userID));
+            var newBookmark = new bookmarkModel(bookmark);
+            var result = await newBookmark.recordBookmark();
+
+            res.send({
+                status: 200,
+                msg: 'Bookmark Added'
+            });
+        }
+    },
+
+    postDeleteBookmark: async function (req, res) {
+        try{
+            var {
+                storeID
+            } = req.body;
+            var userID = req.session.logUser.userID;
+            await bookmarksModel.findOneAndDelete({
+                storeID: storeID,
+                userID: userID
+            });
+            res.send({
+                status: 200,
+                msg: 'Bookmark Deleted'
+            });
+        }catch{
+            res.send({
+                status: 500,
+                msg: 'Something went wrong. Bookmark not deleted'
+            });
+        }
     },
 
 }

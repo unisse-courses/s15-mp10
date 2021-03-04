@@ -1,3 +1,34 @@
+function addBookmark(storeID) {
+    $.post('/addBookmark/', {
+        storeID: storeID
+    }, function (result) {
+        switch (result.status) {
+            case 200:
+                alert(result.msg);
+                break;
+            case 500:
+                alert(result.msg);
+                break;
+        }
+    });
+}
+
+function deleteBookmark(storeID) {
+    $.post('/deleteBookmark/', {
+        storeID: storeID
+    }, function (result) {
+        switch (result.status) {
+            case 200:
+                alert(result.msg);
+                location.reload();
+                break;
+            case 500:
+                alert(result.msg);
+                break;
+        }
+    });
+}
+
 function filterAll() {
     $.post('/userSettings/filter/0', {
         filter: false
@@ -50,10 +81,12 @@ function headerSearch() {
     var search = $('#header_searchInput').val();
     if (validator.isEmpty(search)) {
         console.log('empty');
-        $.post('/userSettings/search/true',{clear: true}, function () {
+        $.post('/userSettings/search/true', {
+            clear: true
+        }, function () {
             window.location = '/';
-        });   
-    }else{
+        });
+    } else {
         $.post('/userSettings/search/' + search, function () {
             window.location = '/';
         });
@@ -64,10 +97,12 @@ function jumboSearch() {
     var search = $('#jumbo_searchInput').val();
     if (validator.isEmpty(search)) {
         console.log('empty');
-        $.post('/userSettings/search/true',{clear: true}, function () {
+        $.post('/userSettings/search/true', {
+            clear: true
+        }, function () {
             window.location = '/';
-        });   
-    }else{
+        });
+    } else {
         $.post('/userSettings/search/' + search, function () {
             window.location = '/';
         });
@@ -76,7 +111,9 @@ function jumboSearch() {
 }
 
 function removeSettings() {
-    $.post('/userSettings/search/true',{clear:true}, function () {
+    $.post('/userSettings/search/true', {
+        clear: true
+    }, function () {
         $.post('/userSettings/filter/0', function () {});
     });
 }

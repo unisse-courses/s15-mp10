@@ -44,7 +44,7 @@
                 <button class="btn btn-outline-success" id="userProf_storeCreate">Create a Store</button>
                 {{/if}}
                 <hr>
-                <a class="btn btn-outline-success" id="userProf_storeProf" href="/profile/bookmarks/{{userID}}">See Bookmarks</a>
+                <a class="btn btn-outline-success" id="userProf_storeProf" href="/profile/user/{{userID}}">See Reviews</a>
                 {{else}}
                 {{/if}}
             </div>
@@ -131,9 +131,15 @@
         <div class="col-8 p-1">
 
             <div class="ml-5">
-                {{#each reviews}}
-                {{>user_review this}}
+                {{#if accOwner}}
+                {{#each bookmarks}}
+                {{>user_bookmark this}}
                 {{/each}}
+                {{else}}
+                {{#each bookmarks}}
+                {{>user_bookmarkGuest this}}
+                {{/each}}
+                {{/if}}
 
             </div>
 

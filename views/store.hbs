@@ -42,9 +42,15 @@
 <div class="container">
     <div>
         <div>
-            <div class="d-flex align-items-end p-0">
-                <h3 class="text-secondary ml-3 mb-1">{{storeName}}</h3>
-                <img class="rating ml-3 mb-2" src="../assets/img/ratings/{{stars}}star.png" alt="{{stars}} stars">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-end p-0">
+                    <h3 class="text-secondary ml-3 mb-1">{{storeName}}</h3>
+                    <img class="rating ml-3 mb-2" src="../assets/img/ratings/{{stars}}star.png" alt="{{stars}} stars">
+                </div>
+                {{#if guest}}
+                {{else}}
+                <button class="btn btn-outline-success" onclick="addBookmark({{storeID}})">Add to bookmarks</button>
+                {{/if}}
             </div>
             <small class="text-secondary ml-3"><a href="/profile/user/{{ownerID}}">owner</a></small>
         </div>
