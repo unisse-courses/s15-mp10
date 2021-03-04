@@ -52,7 +52,11 @@
                 <button class="btn btn-outline-success" onclick="addBookmark({{storeID}})">Add to bookmarks</button>
                 {{/if}}
             </div>
+            {{#if owner}}
+            <small class="text-secondary ml-3"><a href="/profile/store/{{myStoreID}}">Go to Store Porfile</a></small>
+            {{else}}
             <small class="text-secondary ml-3"><a href="/profile/user/{{ownerID}}">owner</a></small>
+            {{/if}}
         </div>
         <hr>
         <div>

@@ -69,6 +69,47 @@ function Bookmark(storeID, userID) {
     this.userID = userID;
 }
 
+async function getBookmarks(userID){
+    try{
+        return await bookmarksModel.aggregate([{
+            '$match': {
+                'userID': parseInt(userID)
+            }
+        }, {
+            '$lookup': {
+                'from': 'Stores',
+                'localField': 'storeID',
+                'foreignField': 'storeID',
+                'as': 'strDta'
+            }
+        }, {
+            '$unwind': {
+                'path': '$strDta',
+                'preserveNullAndEmptyArrays': true
+            }
+        }, {
+            '$project': {
+                'storeID': 1,
+                'storeName': '$strDta.storeName',
+                'description': '$strDta.description',
+                'stars': '$strDta.stars'
+            }
+        }]);
+    }catch(e){
+        console.log(e);
+        return 0;
+    }
+}
+
+async function getMyStore(userID) {
+    var myStore = await storeModel.findOne({
+        userID: parseInt(userID)
+    });
+    if (!myStore)
+        return 0;
+    return myStore;
+}
+
 async function getScore(reviewID) {
     var score = await reviewsModel.aggregate([{
         '$match': {
@@ -554,9 +595,6 @@ const indexFunctions = {
     },
 
     getHomepage: async function (req, res) {
-        /**DEBUG */
-        // console.log('homepage: ');
-        // console.log(req.session);
         try { //initialize settings if not found
             console.log(req.session.userSettings.search);
             console.log(req.session.userSettings.filter);
@@ -592,16 +630,14 @@ const indexFunctions = {
 
 
         if (req.session.type) { //check if user is logged in
-            var myStore = await storeModel.findOne({
-                userID: req.session.logUser.userID
-            });
+            var myStore = await getMyStore(req.session.logUser.userID);
             res.render('homepage', {
                 title: 'ReviewMe',
                 guest: false,
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
                 storeOwner: req.session.logUser.isStoreOwner,
-                myStoreID:myStore.storeID,
+                myStoreID: myStore.storeID,
                 stores: JSON.parse(JSON.stringify(matches)),
                 searchStore: req.session.userSettings.search,
             });
@@ -639,43 +675,39 @@ const indexFunctions = {
             var user = await userModel.findOne({
                 userID: userID
             });
-            var store = await storeModel.findOne({
-                userID: userID
-            });
-            var matches = await reviewsModel.aggregate([{
-                '$lookup': {
-                    'from': 'Stores',
-                    'localField': 'storeID',
-                    'foreignField': 'storeID',
-                    'as': 'Store'
-                }
-            }, {
-                '$match': {
-                    '$and': [{
-                        'userID': parseInt(userID)
-                    }, {
-                        'deleted': false
-                    }]
-                }
-            }, {
-                '$unwind': {
-                    'path': '$Store',
-                    'preserveNullAndEmptyArrays': true
-                }
-            }, {
-                '$project': {
-                    'postDate': 1,
-                    'content': 1,
-                    'storeRating': 1,
-                    'score': 1,
-                    'storeID': 1,
-                    'storeName': '$Store.storeName',
-                }
-            }]);
+            var store = await getMyStore(userID);
+                var matches = await reviewsModel.aggregate([{
+                    '$lookup': {
+                        'from': 'Stores',
+                        'localField': 'storeID',
+                        'foreignField': 'storeID',
+                        'as': 'Store'
+                    }
+                }, {
+                    '$match': {
+                        '$and': [{
+                            'userID': parseInt(userID)
+                        }, {
+                            'deleted': false
+                        }]
+                    }
+                }, {
+                    '$unwind': {
+                        'path': '$Store',
+                        'preserveNullAndEmptyArrays': true
+                    }
+                }, {
+                    '$project': {
+                        'postDate': 1,
+                        'content': 1,
+                        'storeRating': 1,
+                        'score': 1,
+                        'storeID': 1,
+                        'storeName': '$Store.storeName',
+                    }
+                }]);
 
-            var myStore = await storeModel.findOne({
-                userID: req.session.logUser.userID
-            });
+            var myStore = await getMyStore(req.session.logUser.userID);
 
             res.render('userProf', {
                 name: req.session.logUser.username,
@@ -748,40 +780,10 @@ const indexFunctions = {
             var user = await userModel.findOne({
                 userID: userID
             });
-            var store = await storeModel.findOne({
-                userID: userID
-            });
-            var matches = await bookmarksModel.aggregate([
-                {
-                  '$match': {
-                    'userID': parseInt(userID)
-                  }
-                }, {
-                  '$lookup': {
-                    'from': 'Stores', 
-                    'localField': 'storeID', 
-                    'foreignField': 'storeID', 
-                    'as': 'strDta'
-                  }
-                }, {
-                  '$unwind': {
-                    'path': '$strDta', 
-                    'preserveNullAndEmptyArrays': true
-                  }
-                }, {
-                  '$project': {
-                    'storeID': 1, 
-                    'storeName': '$strDta.storeName', 
-                    'description': '$strDta.description', 
-                    'stars': '$strDta.stars'
-                  }
-                }
-              ]);
+            var store = await getMyStore(userID);
+            var matches = await getBookmarks(userID);
 
-              var myStore = await storeModel.findOne({
-                userID: req.session.logUser.userID
-            });
-
+            var myStore = await getMyStore(req.session.logUser.userID);
             res.render('userBookmark', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
@@ -872,13 +874,11 @@ const indexFunctions = {
                 reviewed = true;
 
             var owner = await isOwner(storeID, req.session.logUser.userID);
-            var myStore = await storeModel.findOne({
-                userID: req.session.logUser.userID
-            });
+            var myStore = await getMyStore(req.session.logUser.userID);
             res.render('store', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
-                myStoreID:myStore.storeID,
+                myStoreID: myStore.storeID,
                 searchStore: req.session.userSettings.search,
                 title: store.storeName,
                 guest: false,
@@ -978,7 +978,7 @@ const indexFunctions = {
                     name: req.session.logUser.username,
                     ID: req.session.logUser.userID,
                     storeOwner: req.session.logUser.isStoreOwner,
-                    myStoreID:myStore.storeID,
+                    myStoreID: myStore.storeID,
                     title: store.storeName,
                     storeID: store.storeID,
                     storeName: store.storeName,
@@ -1063,8 +1063,6 @@ const indexFunctions = {
             if (result) {
                 req.session.logUser = newUser;
                 req.session.type = 'regularUser';
-                /**DEBUG */
-                console.log(req.session);
                 res.send({
                     status: 200,
                     userID
@@ -1092,8 +1090,6 @@ const indexFunctions = {
             var store = new Store(storeID, userID, storeName, storeDesc, 0);
             var newStore = new storeModel(store);
             var result = await newStore.recordStore();
-            // console.log('postStoreSignup result:');
-            // console.log(result);
             if (result) {
                 await userModel.findOneAndUpdate({
                     userID: userID
@@ -1244,7 +1240,6 @@ const indexFunctions = {
         if (match[0] == null) { //create new document if not exist
             var score = new reviewScore(reviewID, userID, 1);
             var newScore = new reviewScoreModel(score);
-            console.log(newScore);
             await newScore.recordScore();
         } else { // update score if exist
             await reviewScoreModel.findOneAndUpdate({
@@ -1278,7 +1273,6 @@ const indexFunctions = {
         if (match[0] == null) { //create new document if not exist
             var score = new reviewScore(reviewID, userID, -1);
             var newScore = new reviewScoreModel(score);
-            console.log(newScore);
             await newScore.recordScore();
         } else { // update score if exist
             await reviewScoreModel.findOneAndUpdate({
@@ -1308,7 +1302,6 @@ const indexFunctions = {
 
         var comment = new Comment(commentID, req.session.logUser.userID, req.session.logUser.username, reviewID, content);
         var newComment = new commentModel(comment);
-        console.log(newComment);
         await newComment.recordComment();
 
         res.send();
@@ -1432,7 +1425,7 @@ const indexFunctions = {
     },
 
     postDeleteBookmark: async function (req, res) {
-        try{
+        try {
             var {
                 storeID
             } = req.body;
@@ -1445,7 +1438,7 @@ const indexFunctions = {
                 status: 200,
                 msg: 'Bookmark Deleted'
             });
-        }catch{
+        } catch {
             res.send({
                 status: 500,
                 msg: 'Something went wrong. Bookmark not deleted'
