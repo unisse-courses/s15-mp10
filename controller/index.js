@@ -709,7 +709,7 @@ const indexFunctions = {
 
             var myStore = await getMyStore(req.session.logUser.userID);
 
-            res.render('userProf', {
+            res.render('userprof', {
                 name: req.session.logUser.username,
                 ID: req.session.logUser.userID,
                 searchStore: req.session.userSettings.search,
@@ -758,7 +758,7 @@ const indexFunctions = {
                     'storeName': '$Store.storeName',
                 }
             }]);
-            res.render('userProf', {
+            res.render('userprof', {
                 guest: true,
                 searchStore: req.session.userSettings.search,
                 title: user.username,
