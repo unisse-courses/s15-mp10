@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "* Tan, Gary Jasper\r * Zalamea, Mikiah Matthew T.\r * Go, Kurt Patrick D.",
   "main": "app.js",
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "bootstrap": "^4.5.3",
     "cookie-parser": "^1.4.5",
