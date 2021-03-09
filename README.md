@@ -63,5 +63,5 @@ mikiah.zalamea@gmail.com | 123 | REGULAR USER |
 | 15. Edit store description | Working |
 | 16. upvote/downvote reviews | Working |
 | 17. Filter reviews | Working |
-| 18. Upload photos of store | Only works in localhost but not in heroku |
+| 18. Upload photos of store | does not work in heroku |
 | 19. Login and Logout | Working |
