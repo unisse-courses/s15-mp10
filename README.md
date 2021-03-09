@@ -18,27 +18,26 @@ Run in Terminal
 **SPECS:** 
 | Feature | Progress |
 | ---|--- |
-| 1. Register | Complete |
-| User Background | Complete |
-| Search Store | Complete |
-| View Store | Complete |
-| Add, Edit, Delete Reviews | Complete |
-| Rate Review | Complete |
-| Contribute Photos | Not Implemented |
-| Bookmark Store | Complete |
-| Add, remove photos | Does not work in heroku |
-| Add, edit Details | Complete |
-| Login | Complete |
-| Comment on Reviews | Complete |
-| Sort Reviews | Complete |
+|  1. Register | Complete |
+|  2. User Background | Complete |
+|  3. Search Store | Complete |
+|  4. View Store | Complete |
+|  5. Add, Edit, Delete Reviews | Complete |
+|  6. Rate Review | Complete |
+|  7. Contribute Photos | Not Implemented |
+|  8. Bookmark Store | Complete |
+|  9. Add, remove photos | Does not work in heroku |
+| 10. Add, edit Details | Complete |
+| 11. Login | Complete |
+| 12. Comment on Reviews | Complete |
+| 13. Sort Reviews | Complete |
 
 **SAMPLE USERS**
-USER
-1.  email: mikiah_zalamea@dlsu.edu.ph
-    password: 123
-STOREOWNER
-1.  email: mikiah.zalamea@gmail.com
-    password: 123
+USERS
+| Email | Password | Account Type |
+| --- | --- | :---: |
+mikiah_zalamea@dlsu.edu.ph | 123 | STOREOWNER |
+mikiah.zalamea@gmail.com | 123 | REGULAR USER |
 
 **TESTS:**
 | Functionality | Results |
