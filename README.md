@@ -15,6 +15,10 @@ Run in Terminal
     `DBPASS=CCAPDEV`
 3. run `node app.js`
 
+**DEPLOYMENT:**
+1.  Deployed to heroku 
+    Can be accessed using this link : https://ccapdevs15mp10.herokuapp.com
+
 **SPECS:** 
 | Feature | Progress |
 | ---|--- |
@@ -61,8 +65,3 @@ mikiah.zalamea@gmail.com | 123 | REGULAR USER |
 | 17. Filter reviews | Working |
 | 18. Upload photos of store | Only works in localhost but not in heroku |
 | 19. Login and Logout | Working |
-
-
-**DEPLOYMENT:**
-1.  Deployed to heroku 
-    Can be accessed using this link : https://ccapdevs15mp10.herokuapp.com
