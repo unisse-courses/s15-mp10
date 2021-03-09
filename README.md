@@ -25,7 +25,7 @@ SPECS:
 | View Store | Complete |
 | Add, Edit, Delete Reviews | Complete |
 | Rate Review | Complete |
-| Contribute Photos | Not Implemented |
+| Contribute Photos | <span style="color:red">Not Implemented</span> |
 | Bookmark Store | Complete |
 | Add, remove photos | Does not work in heroku |
 | Add, edit Details | Complete |
