@@ -49,16 +49,16 @@ SPECS:
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-Feature | Results
----|---
-1. Register | Complete
-2. User Background | Complete
-3. Search Store | Complete
-4. View Store | Complete
-5. Add, Edit, Delete Reviews | Complete
-6. Rate Review | Complete
-7. Contribute Photos | Complete
-8. Bookmark Store | Complete
+| Feature | Results |
+| ---|--- |
+| Register | Complete |
+| User Background | Complete |
+| Search Store | Complete |
+| View Store | Complete |
+| Add, Edit, Delete Reviews | Complete |
+| Rate Review | Complete |
+| Contribute Photos | Complete |
+| Bookmark Store | Complete |
 
 SAMPLE USERS
 USER
