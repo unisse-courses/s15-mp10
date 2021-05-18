@@ -49,12 +49,12 @@ Starbucks | jasper456@gmail.com | 222 | STOREOWNER | Starbucks |
 Sbarro | jasper789@dlsu.edu.ph | 222 | STOREOWNER | Sbarro |
 Pepper Lunch | jasper000@yahoo.com | 222 | STOREOWNER | Pepper Lunch |
 Pizza Hut | jasper222@gmail.com | 222 | STOREOWNER | Pizza Hut |
-Jensen Li | mikzal4@gmail.com | 123 | USER | - |
-Joshua Tan | mikzal5@gmail.com | 123 | USER | - |
-Rafael Yu | mikzal6@gmail.com | 123 | USER | - |
-Lev Ng | jasper001@yahoo.com | 222 | USER | - |
-Kyojin Hijikata | jasper002@gmail.com | 222 | USER | - |
-Wylie Chen | jasper003@email.com | 222 | USER | - |
+Jensen Li | mikzal4@gmail.com | 123 | REGULAR | - |
+Joshua Tan | mikzal5@gmail.com | 123 | REGULAR | - |
+Rafael Yu | mikzal6@gmail.com | 123 | REGULAR | - |
+Lev Ng | jasper001@yahoo.com | 222 | REGULAR | - |
+Kyojin Hijikata | jasper002@gmail.com | 222 | REGULAR | - |
+Wylie Chen | jasper003@email.com | 222 | REGULAR | - |
 
 
 
