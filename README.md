@@ -37,11 +37,27 @@ Run in Terminal
 | 13. Sort Reviews | Complete |
 
 **SAMPLE USERS**
-USERS
-| Email | Password | Account Type |
-| --- | --- | :---: |
-mikiah_zalamea@dlsu.edu.ph | 123 | STOREOWNER |
-mikiah.zalamea@gmail.com | 123 | REGULAR USER |
+| Username | Email | Password | Account Type | Store name |
+| --- | --- | --- | :---: | --- |
+mikiah | mikiah_zalamea@dlsu.edu.ph | 123 | STOREOWNER | BurgerKing |
+mikiahAdmin | mikiah.zalamea@gmail.com | 123 | STOREOWNER | Jollibee |
+mikiahMcDo | mikzal1@gmail.com | 123 | STOREOWNER | McDonald's |
+mikiahBonChon | mikzal2@gmail.com | 123 | STOREOWNER | BonChon |
+mikiahChowKing | mikzal3@gmail.com | 123 | STOREOWNER | ChowKing |
+Ramen Kuroda | jasper123@email.com | 222 | STOREOWNER | Ramen Kuroda |
+Starbucks | jasper456@gmail.com | 222 | STOREOWNER | Starbucks |
+Sbarro | jasper789@dlsu.edu.ph | 222 | STOREOWNER | Sbarro |
+Pepper Lunch | jasper000@yahoo.com | 222 | STOREOWNER | Pepper Lunch |
+Pizza Hut | jasper222@gmail.com | 222 | STOREOWNER | Pizza Hut |
+Jensen Li | mikzal4@gmail.com | 123 | USER | - |
+Joshua Tan | mikzal5@gmail.com | 123 | USER | - |
+Rafael Yu | mikzal6@gmail.com | 123 | USER | - |
+Lev Ng | jasper001@yahoo.com | 222 | USER | - |
+Kyojin Hijikata | jasper002@gmail.com | 222 | USER | - |
+Wylie Chen | jasper003@email.com | 222 | USER | - |
+
+
+
 
 **TESTS:**
 | Functionality | Results |
